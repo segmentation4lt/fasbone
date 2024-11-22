@@ -37,7 +37,6 @@ server {
         deny  all;
     }
 
-
     #-----------------------------------------------------------------------
     # ファヴィコン ダミー定義
     #-----------------------------------------------------------------------
@@ -106,6 +105,14 @@ server {
         add_header Access-Control-Allow-Credentials true;
         index index.json;
         proxy_intercept_errors on;
+        root /var/home/<任意のパス>/fasbone/public_html;
+        break;
+    }
+
+    #-----------------------------------------------------------------------
+    #固定ファイル ローカルホスト
+    #-----------------------------------------------------------------------
+    location ~* ^.+.(html|htm|shtm|jhtml|css|xml|gif|jpeg|jpg|js|jnt|atom|rss|woff2|ttc|ttf|mml|txt|jad|wml|htc|png|tiff|tif|wbmp|ico|jng|bmp|svgz|svg|webp|jar|war|ear|hqx|doc|pdf|eps|ps|ai|rtf|xls|ppt|wmlc|kml|kmz|7z|cco|jardiff|jnlp|run|pl|pm|prc|pdb|rar|rpm|sea|swf|sit|tk|tcl|der|pem|crt|xpi|xhtml|zip|bin|exe|dll|deb|dmg|eot|img|iso|msi|msp|msm|wasm|mid|midi|kar|mp3|ogg|m4a|ra|3gpp|3gp|mp4|mpg|mpeg|mov|webm|flv|m4v|mng|asf|asx|wmv|avi|json)$ {
         root /var/home/<任意のパス>/fasbone/public_html;
         break;
     }
