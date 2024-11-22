@@ -1,0 +1,129 @@
+server {
+    #-----------------------------------------------------------------------
+    # 待ち受けポート番号とServerName
+    #-----------------------------------------------------------------------
+    listen       80;
+    server_name fasbone.seg4.jp 127.0.0.1;
+
+    #-----------------------------------------------------------------------
+    # DDOS攻撃アクセス元リスト
+    #-----------------------------------------------------------------------
+    include  deny.txt;
+
+    #-----------------------------------------------------------------------
+    # キャラセットの定義
+    #-----------------------------------------------------------------------
+    charset utf-8;
+
+    #-----------------------------------------------------------------------
+    # アクセスログの定義
+    #-----------------------------------------------------------------------
+    access_log  /var/log/nginx/fasbone.seg4.jp awstats;
+
+    #-----------------------------------------------------------------------
+    # 最大アップ—ロードサイズ
+    #-----------------------------------------------------------------------
+    client_max_body_size 700M;
+
+    #-----------------------------------------------------------------------
+    # キャッシュファイルの読み込み
+    #-----------------------------------------------------------------------
+    include proxy_buffer;
+
+    #-----------------------------------------------------------------------
+    #.htaccess等の隠しファイル
+    #-----------------------------------------------------------------------
+    location ~* ^.+.(data|htaccess|htpasswd|dat|csv|sql|sqlite|db|log)$ {
+        deny  all;
+    }
+
+
+    #-----------------------------------------------------------------------
+    # ファヴィコン ダミー定義
+    #-----------------------------------------------------------------------
+    location = /favicon.ico {
+         access_log off;
+         empty_gif;
+         expires 30d;
+         return 200;
+    }
+
+    #-----------------------------------------------------------------------
+    # ゲートウェィエラー出力(JSON)
+    #-----------------------------------------------------------------------
+    error_page 502 = /seg4_502.json;
+    location = /seg4_502.json {
+        add_header Access-Control-Allow-Origin '*' always;
+        add_header Access-Control-Allow-Methods "GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS";
+        add_header Access-Control-Allow-Origin "*";
+        #add_header Access-Control-Allow-Headers "Origin, Authorization, Accept";
+        add_header Access-Control-Allow-Credentials true;
+        add_header Content-Type "application/json; charset=UTF-8";
+        add_header Cache-Control "no-cache,no-store";
+        add_header Set-Cookie "laravel_session=";
+        return 502 "{\"result\":\"502 Bad Gateway.\"}";
+        internal;
+    }
+    #-----------------------------------------------------------------------
+    # リクエストエラー出力(JSON)
+    #-----------------------------------------------------------------------
+    error_page 404 = /seg4_404.json;
+    location = /seg4_404.json {
+        add_header Access-Control-Allow-Origin '*' always;
+        add_header Access-Control-Allow-Methods "GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS";
+        add_header Access-Control-Allow-Headers "Origin, Authorization, Accept";
+        add_header Access-Control-Allow-Credentials true;
+        add_header Content-Type "application/json; charset=UTF-8";
+        add_header Cache-Control "no-cache,no-store";
+        add_header Set-Cookie "laravel_session=";
+        return 404 "{\"result\":\"404 File Not Found.\"}";
+        internal;
+    }
+
+    #-----------------------------------------------------------------------
+    # FASCONにディスパッチ
+    #-----------------------------------------------------------------------
+    location ~ ^(/json/api|/cgi-bin|/private/view) {
+        # limit_req   zone=one  burst=15;
+        # access_log  off;
+        #error_log   /dev/null crit;
+        add_header Access-Control-Allow-Origin '*' always;
+        add_header Access-Control-Allow-Methods "GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS";
+        add_header Access-Control-Allow-Headers "Origin, Authorization, Accept";
+        add_header Access-Control-Allow-Credentials true;
+        proxy_pass http://localhost:8080;
+        proxy_intercept_errors on;
+        break;
+    }
+
+    #-----------------------------------------------------------------------
+    # 永続JSONデータ
+    #-----------------------------------------------------------------------
+    location ~ ^/json/static {
+        add_header Access-Control-Allow-Origin "*";
+        add_header Access-Control-Allow-Methods "POST, GET, OPTIONS";
+        add_header Access-Control-Allow-Headers "Origin, Authorization, Accept";
+        add_header Access-Control-Allow-Credentials true;
+        index index.json;
+        proxy_intercept_errors on;
+        root /var/home/<任意のパス>/fasbone/public_html;
+        break;
+    }
+
+    #-----------------------------------------------------------------------
+    # 基本的な応答処理
+    #-----------------------------------------------------------------------
+    location / {
+        sendfile off;
+        etag off;
+        if_modified_since off;
+        index index.html index.htm;
+
+        root /var/home/<任意のパス>/fasbone/public_html;
+        #try_files $uri /index.html;
+        #try_files $uri /seg4_404.json;
+
+        #try_files $uri /index.php?q=$uri&$args;
+    }
+}
+
