@@ -1,0 +1,41 @@
+CREATE TABLE IF NOT EXISTS public.fascon_parent_action
+(
+    plimary integer NOT NULL DEFAULT nextval('facs_parent_action_plimary_seq'::regclass),
+    last_update timestamp without time zone DEFAULT now(),
+    action_name character varying COLLATE pg_catalog."default" NOT NULL,
+    action_overview character varying COLLATE pg_catalog."default",
+    reqest_method character varying COLLATE pg_catalog."default" NOT NULL DEFAULT 'Post'::character varying,
+    reqest_uri character varying COLLATE pg_catalog."default" NOT NULL DEFAULT '/json/api/'::character varying,
+    guest_access_allow boolean NOT NULL DEFAULT false,
+    update_exists_allow boolean NOT NULL DEFAULT false,
+    bl_type character varying COLLATE pg_catalog."default",
+    bl_args_table_name character varying COLLATE pg_catalog."default",
+    bl_args_sql_begin character varying COLLATE pg_catalog."default",
+    bl_args_where character varying COLLATE pg_catalog."default",
+    bl_args_orderby character varying COLLATE pg_catalog."default",
+    bl_args_page_in character varying COLLATE pg_catalog."default" NOT NULL DEFAULT 'page_in'::character varying,
+    bl_args_content integer NOT NULL DEFAULT '-1'::integer,
+    bl_pagenate_outstyle character varying COLLATE pg_catalog."default" NOT NULL DEFAULT 'json'::character varying,
+    bl_contents text COLLATE pg_catalog."default",
+    project_name character varying COLLATE pg_catalog."default",
+    cgi_dynamic_head text COLLATE pg_catalog."default",
+    CONSTRAINT facs_parent_action_action_name_key UNIQUE (action_name),
+    CONSTRAINT facs_parent_action_plimary_key UNIQUE (plimary),
+    CONSTRAINT facs_parent_action_reqest_uri_key UNIQUE (reqest_uri)
+);
+CREATE TABLE IF NOT EXISTS public.fascon_action_members
+(
+    plimary integer NOT NULL DEFAULT nextval('facs_action_members_plimary_seq'::regclass),
+    last_update timestamp without time zone DEFAULT now(),
+    action_id integer NOT NULL,
+    sql_id integer,
+    member_name character varying COLLATE pg_catalog."default",
+    member_type character varying COLLATE pg_catalog."default",
+    required_check boolean NOT NULL DEFAULT false,
+    max_limit integer NOT NULL DEFAULT '-1'::integer,
+    min_limit integer NOT NULL DEFAULT '-1'::integer,
+    valiback_message character varying COLLATE pg_catalog."default",
+    check_regist character varying COLLATE pg_catalog."default" NOT NULL DEFAULT '*'::character varying,
+    wherelike_flg boolean NOT NULL DEFAULT false,
+    CONSTRAINT facs_action_members_plimary_key UNIQUE (plimary)
+);

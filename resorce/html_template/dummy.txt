@@ -1,0 +1,1 @@
+../mail_template/member_resist/touroku.txt

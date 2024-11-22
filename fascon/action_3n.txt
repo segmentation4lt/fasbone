@@ -1,0 +1,117 @@
+
+
+    //-------------------------------------------------------------------------------------------------------------------------------------
+    // 入力チェック結果を集計
+    //-------------------------------------------------------------------------------------------------------------------------------------
+    for (_key, _value) in &input_params {
+    }
+    valiback_detail.insert(String::from("Result"), 0);
+
+    //-------------------------------------------------------------------------------------------------------------------------------------
+    // ヴァリテーションがある場合は input_resultを組み立てて返却
+    //-------------------------------------------------------------------------------------------------------------------------------------
+    let &check_result = input_result.get(&String::from("Result")).unwrap();
+    // ヴァリテーションの判定
+    let json = 
+    if check_result == 5 {
+        //ヴァリテーションバックで終了
+        format!("{{ \"result\": \"205 validation back\",\"valiback_detail\": {} }}", serde_json::to_string(&valiback_detail).unwrap())
+    } else if server_info.query_string == "validation_only" {
+        // QUERY_STRING指定でビジネスロジックを呼ばずに終了させる。
+        String::from(seg4_common::VALIDATION_ALLOK)
+    } else if UPDATE_EXISTS_ALLOW == true && server_info.is_exists_check== true {
+        // 多重登録禁止チェック
+        String::from(seg4_common::SAME_REQEST)    
+    }else {
+        //---------------------------------------------------------------------------------------------------------------------------------
+        //ビジネスロジックの呼び出し
+        //---------------------------------------------------------------------------------------------------------------------------------
+        let business_logic = ### ACTION ###::BusinessLogic::execute(&server_info,&input_params,&mut pg_client);
+
+        //---------------------------------------------------------------------------------------------------------------------------------
+        // ビジネスロジック処理結果のチェック。5は権限付属、9はシステムエラー、それ以外は正常終了。
+        //---------------------------------------------------------------------------------------------------------------------------------
+        if business_logic.result == 5 {
+            return Ok(HttpResponse::Unauthorized()
+            .header("Content-Type", seg4_common::HTTP_CONTENT_TYPE)
+            .header("Cache-Control", seg4_common::HTTP_CACHE_CONTROL)
+            .header("Set-Cookie", server_info.cookie_line)
+            .body(business_logic.data))
+        } else if business_logic.result == 9 {
+            //エラーログ
+            seg4_common::info!("● BusinessLogic Error. {} {}",serde_json::to_string(&server_info).unwrap(),serde_json::to_string(&input_params).unwrap());
+            return Ok(HttpResponse::InternalServerError()
+            .header("Content-Type", seg4_common::HTTP_CONTENT_TYPE)
+            .header("Cache-Control", seg4_common::HTTP_CACHE_CONTROL)
+            .header("Set-Cookie", server_info.cookie_line)
+            .body(business_logic.data))  
+        }; 
+        //最終出力 ※JSONは一気に変換せず、struct毎にformatで連結する。
+        business_logic.data
+    };
+
+    //-------------------------------------------------------------------------------------------------------------------------------------
+    //  //デバッグが有効ならserver_infoをログ出力
+    //-------------------------------------------------------------------------------------------------------------------------------------
+    if server_info.is_debug == true  {
+        seg4_common::info!("[server result] {}",serde_json::to_string(&server_info).unwrap());
+    };
+
+    //-------------------------------------------------------------------------------------------------------------------------------------
+    //  正常終了時の出力 パスがcgi-binだと画面出力 APIはJSON出力。リクエストはnginxにて制御済 
+    //-------------------------------------------------------------------------------------------------------------------------------------
+    // PATHの定義。アクセス対象ファイルのパス ファイルは body  head  read_module
+    // Action名をF.A.C.Sにて動的に記載↓membership_confirm
+    let template_path = String::from(
+        format!("{}/{}/HawViewSeisekihyou",seg4_common::define::PACKAGE_PATH,seg4_common::define::CGI_TEMPLATE_DIR)
+    );
+    if server_info.reqest_uri.contains("/json/api") == false && json.contains("result\":\"200") == true && server_info.reqest_method == "GET" {
+        //使いまわすので変数化
+        let cgi_output = format!("{}<script type=\"application/json\" id=\"laravel\">{}</script>{}{}{}{}{}{}{}</body></html>",
+        seg4_common::define::TEMPLATE_READ_1,
+        json,
+        seg4_common::fs::read_to_string(format!("{}/head",template_path)).expect("FileLoading is Failed."),
+        seg4_common::define::TEMPLATE_READ_2,
+        seg4_common::fs::read_to_string(format!("{}/body",template_path)).expect("FileLoading is Failed."),
+        seg4_common::define::TEMPLATE_READ_3,
+"",// ### DYNAMIC HEAD ###
+        seg4_common::define::TEMPLATE_READ_4,
+        seg4_common::fs::read_to_string(format!("{}/read_module",template_path)).expect("FileLoading is Failed."));
+
+        //-------------------------------------------------------------------------------------------------------------------------------------
+        // SSGの出力
+        //-------------------------------------------------------------------------------------------------------------------------------------
+        if server_info.is_debug == true && server_info.user_agent.contains("curl") == true && server_info.query_string.contains("permanent") == true {
+            let permanent_dir = &format!("{}/{}{}",seg4_common::define::PACKAGE_PATH,seg4_common::define::CGI_PERMANENT_DIR,server_info.reqest_uri);
+            create_dir_all(permanent_dir).expect("mkdir[CGI_PERMANENT_DIR]  is Failed");
+            let mut file = File::create(format!("{}/index.html",&permanent_dir)).expect("Index HTML File Create is Failed");
+            file.write_all(cgi_output.as_bytes()).expect("CreatedCgiFile Output is Failed");
+        }
+
+        Ok(HttpResponse::Ok()
+        .header("Content-Type", seg4_common::HTTP_CONTENT_TYPE_HTML)
+        .header("Cache-Control", seg4_common::HTTP_CACHE_CONTROL)
+        .header("Set-Cookie", server_info.cookie_line)
+        .body(cgi_output))
+    } else {
+        //-------------------------------------------------------------------------------------------------------------------------------------
+        // 永続JSONの出力
+        //-------------------------------------------------------------------------------------------------------------------------------------
+        //user_agent 
+        if server_info.is_debug == true && server_info.user_agent.contains("curl") == true && server_info.query_string.contains("permanent") == true {
+            let permanent_dir = &format!("{}/{}",seg4_common::define::JSON_PERMANENT_DIR,server_info.reqest_uri.replace("api","static"));
+            create_dir_all(permanent_dir).expect("mkdir[JSON_PERMANENT_DIR]  is Failed");
+            let mut file = File::create(format!("{}/index.json",&permanent_dir)).expect("Static JsonFile Create is Failed");
+            file.write_all(json.as_bytes()).expect("CreatedJsonFile Output is Failed");
+        }
+
+        Ok(HttpResponse::Ok()
+        .header("Content-Type", seg4_common::HTTP_CONTENT_TYPE)
+        .header("Cache-Control", seg4_common::HTTP_CACHE_CONTROL)
+        .header("Set-Cookie", server_info.cookie_line)
+        .body(json))
+    }
+
+
+} //execute 終端
+

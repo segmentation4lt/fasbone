@@ -1,0 +1,37 @@
+[package]
+name = "fasbone"
+version = "0.1.0"
+edition = "2018"
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+actix-web = "3.3.2"
+env_logger = "0.9.0"
+log = "0.4.14"
+log4rs = "1.0.0"
+thiserror = "1.0.29"
+serde_derive = "1.0.131"
+derive_more = "0.99.17"
+regex = "0.1"
+serde_json = "1.0.74"
+serde = "1.0.159"
+http = "0.2.9"
+aes = "0.7.5"
+base64 = "0.13.0"
+block-modes = "0.8.1"
+bytebuffer = "0.2.1"
+rand = "0.8.4"
+chrono = { version = "0.4", features = ["serde"] }
+postgres = "0.19.5"
+pwhash = "1.0.0"
+actix-rt = "2.8.0"
+futures-util = "0.3.28"
+lettre = "0.11.10"
+[dependencies.uuid]
+version = "1.3.2"
+features = [
+    "v4",                # Lets you generate random UUIDs
+    "fast-rng",          # Use a faster (but still sufficiently random) RNG
+    "macro-diagnostics", # Enable better diagnostics for compile-time UUIDs
+]
+

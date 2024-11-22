@@ -1,0 +1,49 @@
+<ul>
+<% for(var i = 0, len = 5; i < len; i++){ %>
+<li>ここがリスト <%= i %> です。変数は <%= lists[i] %>です。</li>
+<% } %>
+</ul>
+<!-- 反映確認 -->
+<div id="func1"></div>
+
+<div id="container">
+   <form method="post" action="/json/api/upload/" enctype="multipart/form-data">
+    <input type="file" name="form_filename">
+    <input type="hidden" name="_token">
+    <p><input type="submit" value="アップロード" disabled></p>
+   </form>
+</div>
+<hr>
+<div>
+    <form method="post" action="/json/api/member/cert/" method="POST">
+    <p>ログイン</p>
+        <lavel>ログインID(メールアドレス)</lavel>
+        <div>
+            <input type="text" name="userid" placeholder="メールアドレス">
+        </div>
+        <lavel>パスワード</lavel>
+        <div>
+            <input type="password" name="passwd" placeholder="パスワード" autocomplete=off>
+        </div>
+        <input type="hidden" name="_token">
+        <p><input type="submit" value="ログイン" disabled></p>
+    </form>
+</div>
+<hr>
+<div>
+    <form method="post" action="/json/api/member/resist/" method="POST">
+    <p>会員登録</p>
+        <lavel>ログインID(メールアドレス)</lavel>
+        <div>
+            <input type="text" name="userid" placeholder="メールアドレス">
+        </div>
+        <lavel>パスワード</lavel>
+        <div>
+            <input type="password" name="passwd" placeholder="パスワード" autocomplete=off>
+        </div>
+
+        <input type="hidden" name="_token">
+        <p><input type="submit" value="会員登録" disabled></p>
+    </form>
+</div>
+<hr>

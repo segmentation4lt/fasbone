@@ -1,0 +1,3 @@
+{
+    "/":        {"action_name":"TopPageAction",     "api_urlandpath":"/json/static/toppage.json"}
+}

@@ -1,0 +1,53 @@
+        // バックアップ用のSQL
+        const BACKUP_SQL: &str = "insert into seg4planet_logging_record
+        (backup_table_name, backup_record) with tmp_table as (
+                select * from ### TABLE_NAME ###
+            )
+            select '### TABLE_NAME ###' as name , cast(to_json(tmp_table.*) as text) as out from tmp_table ### WHERE ###::int8 returning plimary as id;
+        ";
+
+        //-------------------------------------------------------------------------------------------------------------------------------------
+        // バックアップの取得
+        //-------------------------------------------------------------------------------------------------------------------------------------
+        if QUERY_SQL.to_lowercase().contains("update") == true || QUERY_SQL.to_lowercase().contains("delete") == true {
+            let loggingdb_backup_stmt = pg_client.prepare_typed(&BACKUP_SQL.replace("### WHERE ###",&where_args).replace("### TABLE_NAME ###",&table_name), &[
+                ### sql_stmt_no_page ###
+            ]).unwrap();
+            let loggingdb_backup_query = pg_client.query_one(&loggingdb_backup_stmt, &[
+                ### sql_exec_no_page ###
+            ]);
+            let loggingdb_backup_id = if loggingdb_backup_query.is_err() == true {
+                -1
+            } else{
+                match loggingdb_backup_query.expect("LoggingDB Backup Failed.").get(0) {
+                    Some(value) => value,
+                    None => -1
+                }
+            };
+            // loggingdb_backup_idが-1ということは対象件数0なので処理を中断
+            if loggingdb_backup_id < 0 {
+                // update/deleteで対象が無いのは許されない。
+                return BusinessLogic {
+                    result:9,
+                    data:String::from("{\"result\":\"503 No Such Record.\"}"), 
+                }
+            }
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------------
+        // SQLの実施
+        //-------------------------------------------------------------------------------------------------------------------------------------
+        let query_execute_stmt = pg_client.prepare_typed(&QUERY_SQL.replace("### WHERE ###",&where_args).replace("### TABLE_NAME ###",&table_name), &[
+            ### sql_stmt_no_page ###
+        ]).unwrap();
+        let query_execute_query = pg_client.query_one(&query_execute_stmt, &[
+            ### sql_exec_no_page ###
+        ]);
+        let return_strings :String = if query_execute_query.is_err() == true {
+            String::from("")
+        } else{
+            match query_execute_query.expect("LoggingDB Execute Failed.").get(0) {
+                Some(value) => value,
+                None => String::from("")
+            }
+        };
