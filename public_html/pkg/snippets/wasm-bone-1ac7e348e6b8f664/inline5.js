@@ -1,0 +1,1 @@
+export async function FasconExtendForm(e,a){e=JSON.parse(wasm.reqdataform(e,a));return wasm.fasconextendmanual(e.request_method,e.request_url,e.serialize)}

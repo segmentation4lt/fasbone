@@ -1,0 +1,15 @@
+{
+  "name": "wasm-bone",
+  "type": "module",
+  "version": "0.1.0",
+  "files": [
+    "wasm_bone_bg.wasm",
+    "wasm_bone.js",
+    "wasm_bone.d.ts"
+  ],
+  "main": "wasm_bone.js",
+  "types": "wasm_bone.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}

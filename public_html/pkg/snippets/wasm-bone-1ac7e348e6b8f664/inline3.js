@@ -1,0 +1,1 @@
+export function ReqDataForm(e,t){var r,o=new Object,e=document.querySelector('[name="'+e+'"]'),a=new FormData(e),n=(t=void 0!==t&&t,new URLSearchParams);for(r of a.entries())n.append(r[0],r[1]);return o.serialize=n.toString(),o.request_method=e.method.toUpperCase(),o.request_url=1==t&"POST"==o.request_method?e.action+"?validation_only":e.action,JSON.stringify(o)}

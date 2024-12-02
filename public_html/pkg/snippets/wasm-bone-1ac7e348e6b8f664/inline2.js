@@ -1,0 +1,1 @@
+export async function BoneRender(e,t,n="{}"){e=await fetch("/template/common/"+e+".template"),e=e.ok?await e.text():"読込エラー",e=_.template(e);document.getElementById(t).innerHTML=e(JSON.parse(""==n?null:n))}
