@@ -127,7 +127,7 @@ server {
         index index.html index.htm;
 
         root /var/home/<任意のパス>/fasbone/public_html;
-        #try_files $uri /index.html;
+        try_files $uri /index.html;
         #try_files $uri /seg4_404.json;
 
         #try_files $uri /index.php?q=$uri&$args;

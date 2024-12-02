@@ -8,7 +8,7 @@ import * as __wbg_star1 from './snippets/wasm-bone-1ac7e348e6b8f664/inline1.js';
 let wasm;
 
 export function pageload() {
-    wasm.pageload();
+    //wasm.pageload();
 }
 
 export function gethost() {
@@ -272,6 +272,7 @@ function __wbg_finalize_init(instance, module) {
 
 
     wasm.__wbindgen_start();
+    wasm.pageload();
     return wasm;
 }
 

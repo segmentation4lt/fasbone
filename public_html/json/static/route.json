@@ -1,3 +1,4 @@
 {
-    "/":        {"action_name":"TopPageAction",     "api_urlandpath":"/json/static/toppage.json"}
+    "/":{"action_name":"TopPageAction",     "api_urlandpath":"/json/static/toppage.json"},
+    "404":{"action_name":"404",     "api_urlandpath":"/json/static/404.json"}
 }
