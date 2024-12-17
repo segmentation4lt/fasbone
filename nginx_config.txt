@@ -6,11 +6,6 @@ server {
     server_name fasbone.seg4.jp 127.0.0.1;
 
     #-----------------------------------------------------------------------
-    # DDOS攻撃アクセス元リスト
-    #-----------------------------------------------------------------------
-    include  deny.txt;
-
-    #-----------------------------------------------------------------------
     # キャラセットの定義
     #-----------------------------------------------------------------------
     charset utf-8;
@@ -26,25 +21,10 @@ server {
     client_max_body_size 700M;
 
     #-----------------------------------------------------------------------
-    # キャッシュファイルの読み込み
-    #-----------------------------------------------------------------------
-    include proxy_buffer;
-
-    #-----------------------------------------------------------------------
     #.htaccess等の隠しファイル
     #-----------------------------------------------------------------------
     location ~* ^.+.(data|htaccess|htpasswd|dat|csv|sql|sqlite|db|log)$ {
         deny  all;
-    }
-
-    #-----------------------------------------------------------------------
-    # ファヴィコン ダミー定義
-    #-----------------------------------------------------------------------
-    location = /favicon.ico {
-         access_log off;
-         empty_gif;
-         expires 30d;
-         return 200;
     }
 
     #-----------------------------------------------------------------------
@@ -55,7 +35,6 @@ server {
         add_header Access-Control-Allow-Origin '*' always;
         add_header Access-Control-Allow-Methods "GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS";
         add_header Access-Control-Allow-Origin "*";
-        #add_header Access-Control-Allow-Headers "Origin, Authorization, Accept";
         add_header Access-Control-Allow-Credentials true;
         add_header Content-Type "application/json; charset=UTF-8";
         add_header Cache-Control "no-cache,no-store";
@@ -83,9 +62,6 @@ server {
     # FASCONにディスパッチ
     #-----------------------------------------------------------------------
     location ~ ^(/json/api|/cgi-bin|/private/view) {
-        # limit_req   zone=one  burst=15;
-        # access_log  off;
-        #error_log   /dev/null crit;
         add_header Access-Control-Allow-Origin '*' always;
         add_header Access-Control-Allow-Methods "GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS";
         add_header Access-Control-Allow-Headers "Origin, Authorization, Accept";
