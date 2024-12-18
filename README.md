@@ -4,6 +4,5 @@ Please refer to the <a href="https://github.com/segmentation4lt/fasbone/wiki/%E2
 <p>インストール方法、概要の説明等詳細は
 <a href="https://github.com/segmentation4lt/fasbone/wiki/%E2%80%98FasBone%E2%80%99-Introduction-guide">wiki</a>を参照下さい</p>
 
-<p>fascon紹介動画:https://youtu.be/RCeLvr3_aNE</p>
-
+<p>If you have any questions or problems, <a href="https://github.com/segmentation4lt/fasbone/issues">please write here</a>.</p>
 
