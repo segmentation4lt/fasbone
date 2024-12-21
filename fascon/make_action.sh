@@ -346,7 +346,15 @@ cat $TMP_member_get_loop >>$TMP_BL_FILE
 printf "        const table_name: &str = \"$bl_args_table_name\";\n" >>$TMP_BL_FILE
 printf "        const where_args: &str = \"$bl_args_where\";\n" >>$TMP_BL_FILE
 if [ $bl_type == "loggingdb" ]; then
-    printf "        const QUERY_SQL: &str = \"$bl_args_sql_begin\";\n" >>$TMP_BL_FILE
+    printf "        const QUERY_SQL: &str =\"with tmp_table as (\n" >>$TMP_BL_FILE
+    printf "    $bl_args_sql_begin\n" >>$TMP_BL_FILE
+    printf "        )\n" >>$TMP_BL_FILE
+    if [ $bl_pagenate_outstyle == "csv" ]; then
+        printf "            select '\"\"' || trim(concat_ws(',',tmp_table.*),'()') || '\"\"' as out from tmp_table;\n" >>$TMP_BL_FILE
+    else
+        printf "            select cast(to_json(tmp_table.*) as text) as out from tmp_table;\n" >>$TMP_BL_FILE
+    fi
+    printf "        \";\n" >>$TMP_BL_FILE
     cat $JOBDIR/model_loggingsql.txt | sed "s/### sql_stmt_no_page ###/$sql_stmt_no_page/g" | sed "s/### sql_exec_no_page ###/$sql_exec_no_page/g" >>$TMP_BL_FILE
 elif [ $bl_type == "pagenate" ]; then
     printf "        const QUERY_SQL: &str =\"with tmp_table as (\n" >>$TMP_BL_FILE
