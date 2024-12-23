@@ -5,6 +5,7 @@ use crate::resorce_module::define;
 use actix_web::http::header::{
     REFERER,
     USER_AGENT,
+    HOST,
     WWW_AUTHENTICATE,
     CONTENT_LENGTH,
     CONTENT_TYPE,
@@ -127,7 +128,15 @@ impl ServerInfomation {
             Some(value) => value.to_string(),
             None => "".to_string()
         };
-        //let ret_realip_remote_addr = str_realip_remote_addr.to_string();
+
+        //---------------------------------------------------------------------------------------------------------------------------------
+        // HOST
+        //---------------------------------------------------------------------------------------------------------------------------------
+        let str_http_host: &str= match req.headers().get(&HOST) {
+            Some(value) => value.to_str().unwrap(),
+            None => ""
+        };
+        let ret_http_host = str_http_host.to_string();
 
         //---------------------------------------------------------------------------------------------------------------------------------
         // CONTENT_LENGTH
@@ -366,12 +375,12 @@ impl ServerInfomation {
         // 最終的なcookieに投入する値。uuidは新規発行又は既存のsessionテーブルから抽出
         //---------------------------------------------------------------------------------------------------------------------------------
         let ret_cookie_line :String = if ret_post_token_id == "" {
-            format!("laravel_session=;Domain={};Path=/;{}",ret_realip_remote_addr,seg4_common::define::SAMESITE_SECURE)
+            format!("laravel_session=;Domain={};Path=/;{}",ret_http_host,seg4_common::define::SAMESITE_SECURE)
         }else {
             format!("laravel_session={};Domain={};Path=/;{}",if laravel_continue == true {
                 getcoolie_split_ary[1].to_string()
             }else{
-                seg4_common::encrypt(&ret_post_token_id)},ret_realip_remote_addr,seg4_common::define::SAMESITE_SECURE)
+                seg4_common::encrypt(&ret_post_token_id)},ret_http_host,seg4_common::define::SAMESITE_SECURE)
         };
 
         //---------------------------------------------------------------------------------------------------------------------------------
