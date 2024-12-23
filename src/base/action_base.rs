@@ -5,7 +5,6 @@ use crate::resorce_module::define;
 use actix_web::http::header::{
     REFERER,
     USER_AGENT,
-    HOST,
     WWW_AUTHENTICATE,
     CONTENT_LENGTH,
     CONTENT_TYPE,
@@ -36,7 +35,7 @@ pub struct ServerInfomation{
     pub reqest_method:String,//メソッド(GETでセッション発行 POSTでセッションチェック)
     pub user_agent:String,  // ユーザーエージェント
     pub http_referer:String, //リファラー
-    pub http_host:String, //ホスト
+    pub realip_remote_addr:String, //ホスト
     pub http_content_length:String, //ファイル長(標準入力)
     pub http_content_type:String, //タイプ(multipartかどうが判別する材料)
     pub reqest_uri:String, //URI
@@ -81,14 +80,14 @@ impl ServerInfomation {
     ";
     //session新規追加
     const INSERT_SESSION_MANAGEMENTS: &str = "insert into seg4planet_session_managements
-        (uuid, http_referer, user_agent, http_host, reqest_uri, last_update) values 
+        (uuid, http_referer, user_agent, realip_remote_addr, reqest_uri, last_update) values 
         ($1, $2, $3, $4, $5, $6);
     ";
     //UUID取得&最終更新時刻更新
     const SELECT_BY_UUID: &str = "update seg4planet_session_managements set last_update=$5, reqest_uri=$6 where 
         uuid= $1 and 
         user_agent= $2 and 
-        http_host=$3 and 
+        realip_remote_addr=$3 and 
         http_referer like $4 returning auth_id;
     ";
     //時間が経過したsessionを削除
@@ -122,13 +121,13 @@ impl ServerInfomation {
         let ret_user_agent = str_user_agent.to_string(); 
 
         //---------------------------------------------------------------------------------------------------------------------------------
-        // HOST
+        // REALIP_REMOTE_ADDR
         //---------------------------------------------------------------------------------------------------------------------------------
-        let str_http_host: &str= match req.headers().get(&HOST) {
-            Some(value) => value.to_str().unwrap(),
-            None => ""
+        let ret_realip_remote_addr: String= match req.connection_info().realip_remote_addr() {
+            Some(value) => value.to_string(),
+            None => "".to_string()
         };
-        let ret_http_host = str_http_host.to_string();
+        //let ret_realip_remote_addr = str_realip_remote_addr.to_string();
 
         //---------------------------------------------------------------------------------------------------------------------------------
         // CONTENT_LENGTH
@@ -331,7 +330,7 @@ impl ServerInfomation {
                     db_base::Type::TEXT,db_base::Type::INT8,db_base::Type::TEXT
                 ]).unwrap();
                 let count_ret = pg_client.query(&prep_stmt, &[
-                    &local_uuid,&ret_user_agent,&ret_http_host,&check_referer,&ret_timestamp,&ret_reqest_uri
+                    &local_uuid,&ret_user_agent,&ret_realip_remote_addr,&check_referer,&ret_timestamp,&ret_reqest_uri
                 ]).unwrap();
                 let mut count_score: i64 = 0;
                 for count_args in count_ret {
@@ -348,7 +347,7 @@ impl ServerInfomation {
                     //---------------------------------------------------------------------------------------------------------------------
                     Self::new_session_record (
                         &ret_reqest_method,&ret_http_referer,&ret_user_agent,
-                        &ret_http_host,&ret_reqest_uri,&ret_timestamp,pg_client, 
+                        &ret_realip_remote_addr,&ret_reqest_uri,&ret_timestamp,pg_client, 
                     )
                 };
                 ret2_uuid
@@ -359,7 +358,7 @@ impl ServerInfomation {
             //-----------------------------------------------------------------------------------------------------------------------------
             Self::new_session_record (
                 &ret_reqest_method,&ret_http_referer,&ret_user_agent,
-                &ret_http_host,&ret_reqest_uri,&ret_timestamp,pg_client, 
+                &ret_realip_remote_addr,&ret_reqest_uri,&ret_timestamp,pg_client, 
             )
         };
 
@@ -367,12 +366,12 @@ impl ServerInfomation {
         // 最終的なcookieに投入する値。uuidは新規発行又は既存のsessionテーブルから抽出
         //---------------------------------------------------------------------------------------------------------------------------------
         let ret_cookie_line :String = if ret_post_token_id == "" {
-            format!("laravel_session=;Domain={};Path=/;{}",ret_http_host,seg4_common::define::SAMESITE_SECURE)
+            format!("laravel_session=;Domain={};Path=/;{}",ret_realip_remote_addr,seg4_common::define::SAMESITE_SECURE)
         }else {
             format!("laravel_session={};Domain={};Path=/;{}",if laravel_continue == true {
                 getcoolie_split_ary[1].to_string()
             }else{
-                seg4_common::encrypt(&ret_post_token_id)},ret_http_host,seg4_common::define::SAMESITE_SECURE)
+                seg4_common::encrypt(&ret_post_token_id)},ret_realip_remote_addr,seg4_common::define::SAMESITE_SECURE)
         };
 
         //---------------------------------------------------------------------------------------------------------------------------------
@@ -382,7 +381,7 @@ impl ServerInfomation {
             reqest_method:ret_reqest_method,
             user_agent:ret_user_agent, 
             http_referer:ret_http_referer,
-            http_host:ret_http_host,
+            realip_remote_addr:ret_realip_remote_addr,
             http_content_length:ret_http_content_length,
             http_content_type:ret_http_content_type,
             reqest_uri:ret_reqest_uri,
@@ -409,7 +408,7 @@ impl ServerInfomation {
         ret_reqest_method:&String,
         ret_http_referer:&String,
         ret_user_agent:&String,
-        ret_http_host:&String,
+        ret_realip_remote_addr:&String,
         ret_reqest_uri:&String,
         ret_timestamp:&i64,
         pg_client: &mut db_base::postgres::Client, 
@@ -425,7 +424,7 @@ impl ServerInfomation {
             //sessionを新規登録
             pg_client.execute(
                 Self::INSERT_SESSION_MANAGEMENTS,
-                &[&local_uuid,&ret_http_referer,&ret_user_agent,&ret_http_host,&ret_reqest_uri,&ret_timestamp],
+                &[&local_uuid,&ret_http_referer,&ret_user_agent,&ret_realip_remote_addr,&ret_reqest_uri,&ret_timestamp],
             ).unwrap();
             local_uuid
         } else {

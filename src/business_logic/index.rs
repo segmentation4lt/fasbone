@@ -8,7 +8,7 @@
 
 
 
-curl -XPOST -d '_token=a' -d 'userid=a' -d 'passwd=a' -b 'laravel_session=' http://127.0.0.1/json/api/member/resist/
+curl -XPOST -d '_token=a' -d 'userid=a' -d 'passwd=a' -b 'laravel_session=' http://192.168.23.13/json/api/member/resist/
 
 
 */
@@ -62,7 +62,7 @@ impl BusinessLogic {
             auth_id integer not null default -1,
             http_referer varchar  not null ,
             user_agent varchar  not null ,
-            http_host varchar  not null ,
+            realip_remote_addr varchar  not null ,
             reqest_uri varchar  not null ,
             last_update bigint not null
         );
@@ -71,8 +71,8 @@ impl BusinessLogic {
     // SEG4初期テーブル:セッション管理テストデータ
     const SEG4PLANET_SESSION_MANAGEMENTS_INSERT: &str = " 
         insert into public.seg4planet_session_managements(
-            uuid, auth_id, http_referer, user_agent, http_host, reqest_uri,last_update)
-            values ('00000000-0000-0000-0000-000000000000', 1, '', 'curl/7.77.0', '127.0.0.1', '/json/api/', 0);
+            uuid, auth_id, http_referer, user_agent, realip_remote_addr, reqest_uri,last_update)
+            values ('00000000-0000-0000-0000-000000000000', 1, '', 'curl/7.77.0', '192.168.23.13', '/json/api/', 0);
     ";
 
     // SEG4初期テーブル:メンバーシップ管理基幹テーブル作成
@@ -92,7 +92,7 @@ impl BusinessLogic {
     const SEG4PLANET_AUTH_BASIC_INSERT: &str = "
         insert into public.seg4planet_auth_basic(
             auth_id, auth_prefix, auth_password, regist_confirm_data, confirm_uuid, register_datetime)
-            values (1, 'test@localhost.localdomain', '$2b$10$CE017CK0psCSUCKs/Xr2EufqFGmKDDQmFVFT/xHCToU.L4IVGz40O', 'curl/7.77.0', NULL, 0);   
+            values (1, 'test@hyda-crypt.local', '$2b$10$CE017CK0psCSUCKs/Xr2EufqFGmKDDQmFVFT/xHCToU.L4IVGz40O', 'curl/7.77.0', NULL, 0);   
     ";
 
     // SEG4初期テーブル:ロギングDBテーブル作成

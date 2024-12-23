@@ -159,7 +159,7 @@ mod tests {
             reqest_method: String::from("GET"),
             user_agent: String::from("curl/7.77.0"),
             http_referer: String::from(""),
-            http_host: String::from("127.0.0.1"),
+            realip_remote_addr: String::from("127.0.0.1"),
             http_content_length: String::from("94"),
             http_content_type: String::from("application/x-www-form-urlencoded"),
             reqest_uri: String::from("/json/api/member/confirm/06316faf-14f9-4364-a9b0-f9b70920de92"),
