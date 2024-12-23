@@ -3,14 +3,14 @@
 # SQL実行関数。区切り文字は半角セミコロン[;]
 #------------------------------------------------------------------------------
 exec_sql() {
-    eval "/usr/local/pgsql/bin/psql -U $PG_CONNECT_USER -h localhost -p5432 $PG_CONNECT_DATABASE -tA -F \";\" -c  \"$*\""
+    eval "psql -U $PG_CONNECT_USER -h localhost -p5432 $PG_CONNECT_DATABASE -tA -F \";\" -c  \"$*\""
 }
 
 #------------------------------------------------------------------------------
 # 初期設定
 #------------------------------------------------------------------------------
 #コマンドのパス
-export PATH="/usr/sbin:/usr/bin:/usr/local/bin:/usr/local/sbin:/sbin:/bin:/usr/X11/bin"
+export PATH="/usr/sbin:/usr/bin:/usr/local/bin:/usr/local/sbin:/sbin:/bin:/usr/X11/bin:/usr/local/pgsql/bin"
 #カレントディレクトリ
 JOBNAME=$(basename $0) >/dev/null 2>&1
 JOBDIR=$(echo $0 | sed "s/$JOBNAME//g") >/dev/null 2>&1
