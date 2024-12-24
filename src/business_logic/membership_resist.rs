@@ -1,17 +1,3 @@
-/*
-手順
-①touch ./src/business_logic/<アクション名>.rs
-②vi ./src/business_logic/mod.rs
-[pub mod <アクション名>; //<コメント>]
-③./src/business_logic/<アクション名>.rs を編集
-
-
-
-
-curl -XPOST -d '_token=00000000-0000-0000-0000-000000000000' -d 'userid=test@test.jp' -d 'passwd=nishi8888' -b 'laravel_session=OE5wN2wqVEV3aUIrR1UwcYvTR5OQ7W55gtJkwbDvT6i1iyGd06m/LJoOAfSLx7mv+T8pZ78XW5WDUkrkIehvpg==' http://127.0.0.1/json/api/member/resist/
-
-*/
-
 #![allow(non_snake_case)]
 #![allow(non_upper_case_globals)]
 //-----------------------------------------------------------------------------------------------------------------------------------------

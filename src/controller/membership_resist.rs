@@ -1,9 +1,3 @@
-/*
-curl -XPOST -d '_token=00000000-0000-0000-0000-000000000000' -d 'userid=test@test.net' -d 'passwd=abcdefghijk' -b 'laravel_session=OE5wN2wqVEV3aUIrR1UwcYvTR5OQ7W55gtJkwbDvT6i1iyGd06m/LJoOAfSLx7mv+T8pZ78XW5WDUkrkIehvpg==' http://127.0.0.1/json/api/member/resist/
-
-
-*/
-
 #![allow(non_snake_case)] 
 //-----------------------------------------------------------------------------------------------------------------------------------------
 // actix_webは取り込むモジュールが異なるので各個呼び出し ※要検証

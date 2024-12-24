@@ -1,23 +1,3 @@
-/*
-### PARAM ###←パラメータ名
-### METHOD ###←メソッド(Query or Form)
-※GETの場合    <ハンドラ名>_struct:web::Query<<ハンドラ名>Param>
-※POSTの場合    <ハンドラ名>_struct:web::Form<<ハンドラ名>Param>
-
-手順
-①touch ./src/controller/membership_certification.rs
-②vi ./src/controller/mod.rs
-[pub mod membership_certification; //<コメント>]
-③main.rs内を編集
-[.route("/json/api/member/cert/",web::post().to(controller::membership_certification::execute))]
-※GETの場合    get()
-※POSTの場合   post()
-
-curl -XPOST -d '_token=00000000-0000-0000-0000-000000000000' -d 'userid=test@localhost.localdomain' -d 'passwd=abcdefghijk' -b 'laravel_session=OE5wN2wqVEV3aUIrR1UwcYvTR5OQ7W55gtJkwbDvT6i1iyGd06m/LJoOAfSLx7mv+T8pZ78XW5WDUkrkIehvpg==' http://127.0.0.1/json/api/member/cert/
-
-
-*/
-
 #![allow(non_snake_case)]
 //-----------------------------------------------------------------------------------------------------------------------------------------
 // actix_webは取り込むモジュールが異なるので各個呼び出し ※要検証

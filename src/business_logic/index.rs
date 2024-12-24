@@ -1,18 +1,3 @@
-/*
-手順
-①touch ./src/business_logic/<アクション名>.rs
-②vi ./src/business_logic/mod.rs
-[pub mod <アクション名>; //<コメント>]
-③./src/business_logic/<アクション名>.rs を編集
-
-
-
-
-curl -XPOST -d '_token=a' -d 'userid=a' -d 'passwd=a' -b 'laravel_session=' http://192.168.23.13/json/api/member/resist/
-
-
-*/
-
 #![allow(non_snake_case)]
 //-----------------------------------------------------------------------------------------------------------------------------------------
 // COMMON モジュール(SEG4)
