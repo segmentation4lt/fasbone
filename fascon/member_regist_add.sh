@@ -20,7 +20,7 @@ project_name=$(basename $(echo $JOBDIR | sed s'@/fascon@@g'))
 #テーブル名 存在を確認
 table_name=$1
 if [ $(exec_sql "select count(*) from (select * from information_schema.tables where table_schema = 'public') t left join (select * from information_schema.columns where table_schema = 'public') c on t.table_name = c.table_name where t.table_name = '$table_name' and c.column_name = 'auth_prefix';") -eq 0 ]; then
-    echo "No such table or No such column[auth_id](integer)."
+    echo "No such table or No such column[auth_prefix](varchar)."
     exit 9
 fi
 
