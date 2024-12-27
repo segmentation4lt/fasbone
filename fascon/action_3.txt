@@ -55,6 +55,11 @@
     };
 
     //-------------------------------------------------------------------------------------------------------------------------------------
+    //  動的にheadを生成するのでjsonをobjectに変換
+    //------------------------------------------------------------------------------------------------------------------------------------- 
+    //### JSON OBJECT ###
+
+    //-------------------------------------------------------------------------------------------------------------------------------------
     //  //デバッグが有効ならserver_infoをログ出力
     //-------------------------------------------------------------------------------------------------------------------------------------
     if server_info.is_debug == true  {
@@ -67,18 +72,17 @@
     // PATHの定義。アクセス対象ファイルのパス ファイルは body  head  read_module
     // Action名をF.A.C.Sにて動的に記載↓membership_confirm
     let template_path = String::from(
-        format!("{}/{}/HawViewSeisekihyou",seg4_common::define::PACKAGE_PATH,seg4_common::define::CGI_TEMPLATE_DIR)
+        format!("{}/{}/### ACTION ###",seg4_common::define::PACKAGE_PATH,seg4_common::define::CGI_TEMPLATE_DIR)
     );
     if server_info.reqest_uri.contains("/json/api") == false && json.contains("result\":\"200") == true && server_info.reqest_method == "GET" {
         //使いまわすので変数化
-        let cgi_output = format!("{}<script type=\"application/json\" id=\"laravel\">{}</script>{}{}{}{}{}{}{}</body></html>",
+        let cgi_output = format!("{}<script type=\"application/json\" id=\"laravel\">{}</script>{}{}{}{}{}{}</body></html>",
         seg4_common::define::TEMPLATE_READ_1,
         json,
-        seg4_common::fs::read_to_string(format!("{}/head",template_path)).expect("FileLoading is Failed."),
+        ### DYNAMIC HEAD ###
         seg4_common::define::TEMPLATE_READ_2,
         seg4_common::fs::read_to_string(format!("{}/body",template_path)).expect("FileLoading is Failed."),
         seg4_common::define::TEMPLATE_READ_3,
-"",// ### DYNAMIC HEAD ###
         seg4_common::define::TEMPLATE_READ_4,
         seg4_common::fs::read_to_string(format!("{}/read_module",template_path)).expect("FileLoading is Failed."));
 

@@ -164,9 +164,7 @@ pub fn for_template_outtext(html_template:&str,content_args:&str) -> String {
     let mut i :i32 =0;
     let mut messgages = fs::read_to_string(format!("{}/{}/{}",define::PACKAGE_PATH,define::CGI_TEMPLATE_DIR,html_template)).expect("FileLoading is Failed.");
     for line_args in &content_args_array {
-        if i > 0 {
             messgages = messgages.replace(&format!("### VEC{} ###", i), line_args);
-        }
         i+=1;
     }
     messgages

@@ -25,6 +25,13 @@ impl ResponseError for MyError {}
 //-----------------------------------------------------------------------------------------------------------------------------------------
 use crate::base::seg4_common;
 
+
+//-----------------------------------------------------------------------------------------------------------------------------------------
+// JSONライブラリ
+//-----------------------------------------------------------------------------------------------------------------------------------------
+//pub use serde::{Deserialize ,Serialize};
+
+
 //テスト
 use std::fs;
 
@@ -97,8 +104,9 @@ let template_path = String::from(
 
 //format!("{}{}{}{}\);};</script>{}</body></html>",seg4_common::define::TEMPLATE_READ_1,cgi_head,seg4_common::define::TEMPLATE_READ_2,cgi_body,seg4_common::define::TEMPLATE_READ_3,response_body,cgi_read_module);
 
-
-
+let test="{ \"result\": \"200 reqest complete\",\"api_data\": {\"fqdn\":\"matsuri.2sta.link\",\"title\":\"【ニュース/トレンドまとめ】祭NISTA\",\"name\":\"祭NISTA\",\"description\":\"投資・ギャンブル/動画配信/ゲーム等、各種界隈の世間の声をお伝え致します。\",\"keywords\":\"２ちゃんねる,ニュース,2ch,まとめ\"}}";
+let v: serde_json::Value = serde_json::from_str(&test).unwrap();
+seg4_common::info!("● NISHI {}",format!("{};{};",v["api_data"]["fqdn"],v["api_data"]["fqdn"]));
 
 if ret_reqest_uri.contains("cgi-bin") == true {
     //CGIでの出力
@@ -107,7 +115,11 @@ if ret_reqest_uri.contains("cgi-bin") == true {
     //.header("Cache-Control", seg4_common::HTTP_CACHE_CONTROL)
     //.header("Set-Cookie", server_info.cookie_line)
     //.body("CGI-BIN"))
-    Ok(HttpResponse::Ok().body(format!("{}<script type=\"application/json\" id=\"laravel\">{}</script>{}{}{}{}{}</body></html>",
+    Ok(HttpResponse::Ok()
+    .header("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
+    .header("Expires", "Thu, 01 Jan 1970 00:00:00 GMT")
+    .header("Pragma", "no-cache")
+    .body(format!("{}<script type=\"application/json\" id=\"laravel\">{}</script>{}{}{}{}{}</body></html>",
     seg4_common::define::TEMPLATE_READ_1,
     response_body,   
     fs::read_to_string(format!("{}/req_test/head",template_path)).expect("FileLoading is Failed."),

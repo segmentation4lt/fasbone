@@ -282,9 +282,14 @@ cat $JOBDIR/$ACTION_2_FILE | sed "s/### REQEST_METHOD_FORM ###/$reqest_method_fo
 #member_loop
 cat $TMP_member_check_loop >>$TMP_ACTION_FILE
 #action_3
+func_left=$(echo "seg4_common::for_template_outtext(\"$action_name/head\",\&format\!("|sed 's@\\!@!@g')
+func_right=")),"
 cat $JOBDIR/$ACTION_3_FILE | sed "s/### ACTION ###/$action_name/g" >>$TMP_ACTION_FILE
 if [ "$cgi_dynamic_head" != "" ]; then
-    eval "sed -i 's@\"\",// ### DYNAMIC HEAD ###@$cgi_dynamic_head,@g' $TMP_ACTION_FILE"
+    eval "sed -i 's@//### JSON OBJECT ###@let obj: serde_json::Value = serde_json::from_str(\&json).unwrap();@' $TMP_ACTION_FILE"
+    eval "sed -i 's@### DYNAMIC HEAD ###@$func_left$cgi_dynamic_head$func_right@' $TMP_ACTION_FILE"
+else
+    eval "sed -i 's@### DYNAMIC HEAD ###@seg4_common::fs::read_to_string(format!(\"{}/head\",template_path)).expect(\"FileLoading is Failed.\"),@' $TMP_ACTION_FILE"
 fi
 
 #------------------------------------------------------------------------------
@@ -314,7 +319,7 @@ for line_args in $(exec_sql "select reqest_uri,case when reqest_method <> 'Post'
 done
 #echo "            .route(\"$reqest_uri\",web::$main_web().to(controller::$action_name::execute))" >> $TMP_MAIN_FILE
 
-eval "tail -$zenhan_row $main_rs_file" >>$TMP_MAIN_FILE
+eval "tail -$zenhan_row $main_rs_file|grep -v \"$action_name\"" >>$TMP_MAIN_FILE
 
 #------------------------------------------------------------------------------
 # オリジナルよりcontroller/mod.rs生成
@@ -396,7 +401,6 @@ done
 # 生成ファイルの反映
 #------------------------------------------------------------------------------
 if [ $(cat $JOBDIR/../src/main.rs | grep -c $action_name) -eq 0 ]; then
-    cp -p $TMP_MAIN_FILE $JOBDIR/../src/main.rs
     mkdir -p $JOBDIR/../resorce/html_template/$action_name
     mkdir -p $JOBDIR/../resorce/mail_template/$action_name
     touch $JOBDIR/../resorce/html_template/$action_name/body
@@ -405,6 +409,7 @@ if [ $(cat $JOBDIR/../src/main.rs | grep -c $action_name) -eq 0 ]; then
     cp -p $TMP_CONTROLLER_MOD_RS $JOBDIR/../src/controller/mod.rs
     cp -p $TMP_BUSINESS_LOGIC_MOD_RS $JOBDIR/../src/business_logic/mod.rs
 fi
+cp -p $TMP_MAIN_FILE $JOBDIR/../src/main.rs
 cp -p $TMP_ACTION_FILE $JOBDIR/../src/controller/$action_name.rs
 cp -p $TMP_BL_FILE $JOBDIR/../src/business_logic/$action_name.rs
 echo "▼ Complete."

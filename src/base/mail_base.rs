@@ -31,7 +31,7 @@ pub fn build_email(mail_from:&str,mail_subject:&str,mail_template:&str,func_args
             messgages = messgages.replace(&format!("### VEC{} ###", i), line_args);
         }
         i+=1;
-    }
+    };
     let email = Message::builder()
         .from(mail_from.parse().unwrap())
         .to(func_args_array[0].parse().unwrap())
