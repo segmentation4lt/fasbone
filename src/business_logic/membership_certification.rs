@@ -52,7 +52,7 @@ impl BusinessLogic {
         select auth_id,auth_password from seg4planet_auth_basic where auth_prefix = $1  
      ) select trim(concat_ws(',',tmp_table.*),'()')  as out from tmp_table;";
     //セッションにログインIDを付与
-    const SET_AUTH_BASIC_ID : &str = "update seg4planet_session_managements set auth_id=$1 where uuid=$2;";
+    const SET_AUTH_BASIC_ID : &str = "update seg4planet_session_managements set auth_id=$1,http_referer=$3 where uuid=$2;";
 
     //-------------------------------------------------------------------------------------------------------------------------------------
     // execute 処理開始
@@ -97,7 +97,7 @@ impl BusinessLogic {
             //-------------------------------------------------------------------------------------------------------------------------
             pg_client.execute(
                 Self::SET_AUTH_BASIC_ID,&[
-                    &login_id,&server_info.post_token_id
+                    &login_id,&server_info.post_token_id,&server_info.http_referer
                 ],
             ).expect("auth_basic insert Error.");
             String::from("{\"result\":\"200 Login Compalete.\"}")

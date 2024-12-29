@@ -85,12 +85,18 @@ impl ServerInfomation {
         ($1, $2, $3, $4, $5, $6);
     ";
     //UUID取得&最終更新時刻更新
+    const SELECT_BY_UUID_GET: &str = "update seg4planet_session_managements set last_update=$5, reqest_uri=$6 where 
+        uuid= $1 and 
+        user_agent= $2 and 
+        realip_remote_addr=$3 returning auth_id;
+    ";
     const SELECT_BY_UUID: &str = "update seg4planet_session_managements set last_update=$5, reqest_uri=$6 where 
         uuid= $1 and 
         user_agent= $2 and 
         realip_remote_addr=$3 and 
         http_referer like $4 returning auth_id;
     ";
+
     //時間が経過したsessionを削除
     const TIME_OVER_SESSION_DELETE: &str = "delete from seg4planet_session_managements where  uuid <> '00000000-0000-0000-0000-000000000000' and last_update < $1";
 
@@ -334,10 +340,17 @@ impl ServerInfomation {
                 }else{
                     String::from("")
                 };
-                let prep_stmt = pg_client.prepare_typed(&Self::SELECT_BY_UUID, &[
+                let prep_stmt = if ret_reqest_method == "GET" && ret_http_referer == "" { 
+                    pg_client.prepare_typed(&Self::SELECT_BY_UUID_GET, &[
                     db_base::Type::TEXT,db_base::Type::TEXT,db_base::Type::TEXT,
                     db_base::Type::TEXT,db_base::Type::INT8,db_base::Type::TEXT
-                ]).unwrap();
+                    ]).unwrap()
+                }else{
+                    pg_client.prepare_typed(&Self::SELECT_BY_UUID, &[
+                        db_base::Type::TEXT,db_base::Type::TEXT,db_base::Type::TEXT,
+                        db_base::Type::TEXT,db_base::Type::INT8,db_base::Type::TEXT
+                    ]).unwrap()
+                };
                 let count_ret = pg_client.query(&prep_stmt, &[
                     &local_uuid,&ret_user_agent,&ret_realip_remote_addr,&check_referer,&ret_timestamp,&ret_reqest_uri
                 ]).unwrap();

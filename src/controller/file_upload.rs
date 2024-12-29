@@ -33,7 +33,7 @@ $(document).ready(function() {
     // UUID
     //-----------------------------------------------------//
     $.ajax({
-        url: 'http://127.0.0.1/json/api/',
+        url: 'http://192.168.23.13/json/api/',
         timeout: 10000,
         async:true,
         type:'GET',
@@ -248,7 +248,7 @@ pub async fn execute(
     //-------------------------------------------------------------------------------------------------------------------------------------
     // 不正アクセスのチェック。post_token_idと取得したtoken_valueを比較する
     //-------------------------------------------------------------------------------------------------------------------------------------
-    if server_info.post_token_id == "" || server_info.business_login_id < -1 || content_type_value.contains("application/octet-stream") == true {
+    if server_info.post_token_id != token_value || server_info.business_login_id < 0 || content_type_value.contains("application/octet-stream") == true {
         //エラーログ
         seg4_common::info!("● UUID is Noting. {}",serde_json::to_string(&server_info).unwrap());
         return Ok(HttpResponse::Forbidden()
