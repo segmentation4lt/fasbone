@@ -36,7 +36,7 @@ pub struct ServerInfomation{
     pub reqest_method:String,//メソッド(GETでセッション発行 POSTでセッションチェック)
     pub user_agent:String,  // ユーザーエージェント
     pub http_referer:String, //リファラー
-    pub realip_remote_addr:String, //ホスト
+    pub realip_remote_addr:String, //リアルアクセス元IPアドレス
     pub http_content_length:String, //ファイル長(標準入力)
     pub http_content_type:String, //タイプ(multipartかどうが判別する材料)
     pub reqest_uri:String, //URI
