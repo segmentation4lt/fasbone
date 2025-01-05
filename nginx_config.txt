@@ -3,7 +3,7 @@ server {
     # 待ち受けポート番号とServerName
     #-----------------------------------------------------------------------
     listen       80;
-    server_name fasbone.seg4.jp 127.0.0.1;
+    server_name <FQDN> <IP ADRESS>;
 
     #-----------------------------------------------------------------------
     # キャラセットの定義
@@ -13,7 +13,7 @@ server {
     #-----------------------------------------------------------------------
     # アクセスログの定義
     #-----------------------------------------------------------------------
-    access_log  /var/log/nginx/fasbone.seg4.jp awstats;
+    access_log  /var/log/nginx/<FQDN> awstats;
 
     #-----------------------------------------------------------------------
     # 最大アップ—ロードサイズ
@@ -74,7 +74,7 @@ server {
     #-----------------------------------------------------------------------
     # 永続JSONデータ
     #-----------------------------------------------------------------------
-    set $public_html "/var/home/<任意のパス>/fasbone/public_html";
+    set $public_html "/var/www/fasbone/public_html";
     location ~ ^/json/static {
         add_header Access-Control-Allow-Origin "*";
         add_header Access-Control-Allow-Methods "POST, GET, OPTIONS";
