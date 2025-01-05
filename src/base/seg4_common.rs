@@ -103,6 +103,7 @@ pub fn encrypt(data: &str) -> String {
 // * クレート内関数:url_decode
 // * URLデコードを実施
 //-----------------------------------------------------------------------------------------------------------------------------------------
+#[allow(dead_code)]
 pub fn url_decode(data: &str) -> String {
     let binary = decode_binary(data.as_bytes());
     String::from_utf8_lossy(&binary).to_string()
@@ -208,6 +209,10 @@ mod tests {
     #[test]  
     fn test_for_template_outtext() {
         assert!(seg4_common::for_template_outtext("dummy.txt","aaaa;bbbb").chars().count() > 0);
+    }  
+    #[test]  
+    fn test_url_decode() {
+        assert!(seg4_common::url_decode("%E6%9C%AA%E5%88%86%E9%A1%9E").chars().count() > 0);
     }  
 }
 
