@@ -11,7 +11,7 @@ $ service postgresql start<br>
 $ service nginx start<br>
 $ su - www-data<br>
 $ cd ./fasbone && cargo test<br>
-$ echo "{IMAGE ID}" > ./public_html/js/apihost
+$ echo "{IMAGE ID}" > ./public_html/js/apihost<br>
 $ cargo run<br>
 ------ Docker Base ------<br>
 $ echo "{CONTAINER IP Adress} {IMAGE ID}" >> /etc/hosts<br>
@@ -33,4 +33,12 @@ It is highly compatible with Amazon CloudFront and implements cold standby for A
 There is no task runner or SSR, and AltJS/CSS transpiling needs to be done separately, but it frees you from the stress of hot reloading during development.<br>
 It is also easy to combine with other libraries such as React and Jquery.<br>
 <p>If you have any questions or problems, <a href="https://github.com/segmentation4lt/fasbone/issues">please write here</a>.</p>
+
+<hr>
+<h2>Usage environment</h2>
+Front-end: underscore.js, webassembly<br>
+Backend: Rust<br>
+Command tools: bash<br>
+Database: Postgresql<br>
+Web server: nginx<br>
 
