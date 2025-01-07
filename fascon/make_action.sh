@@ -25,9 +25,6 @@ if [ $(exec_sql "select count(plimary) from fascon_parent_action where action_na
 fi
 #parent_actionのパラメタ取得
 action_record=$(exec_sql "select reqest_method::text, reqest_uri::text,guest_access_allow::text,update_exists_allow::text,action_overview::text,bl_args_table_name::text,bl_args_orderby::text,bl_args_page_in::text,bl_args_content::text,bl_type::text,bl_pagenate_outstyle::text from fascon_parent_action where action_name='$action_name' and project_name='$project_name';")
-#※追加:parent_actionのcgi_dynamic_head取得
-cgi_dynamic_head=$(exec_sql "select cgi_dynamic_head from fascon_parent_action where action_name='$action_name' and project_name='$project_name';")
-
 #リクエストメソッド
 reqest_method=$(echo $action_record | cut -d ";" -f 1)
 #リクエストURI
@@ -50,6 +47,14 @@ bl_args_content=$(echo $action_record | cut -d ";" -f 9)
 bl_type=$(echo $action_record | cut -d ";" -f 10)
 #pagenate時の出力スタイル。json又はcsv
 bl_pagenate_outstyle=$(echo $action_record | cut -d ";" -f 10)
+#------------------------------------------------------------------------------
+# 一気に取れないSQLを生成
+#------------------------------------------------------------------------------
+bl_args_sql_begin=$(exec_sql "select bl_args_sql_begin from fascon_parent_action where action_name='$action_name' and project_name='$project_name';")
+bl_args_where=$(exec_sql "select bl_args_where from fascon_parent_action where action_name='$action_name' and project_name='$project_name';")
+cgi_dynamic_head=$(exec_sql "select cgi_dynamic_head from fascon_parent_action where action_name='$action_name' and project_name='$project_name';")
+cgi_replace_body=$(exec_sql "select cgi_replace_body from fascon_parent_action where action_name='$action_name' and project_name='$project_name';")
+
 #アクションメンバ 存在を確認
 menber_count=$(exec_sql "select count(fascon_action_members.plimary) from fascon_action_members inner join fascon_parent_action on fascon_parent_action.plimary=fascon_action_members.action_id where fascon_parent_action.action_name='$action_name';")
 #if [ $menber_count -eq 0 ]; then
@@ -288,6 +293,11 @@ cat $JOBDIR/$ACTION_3_FILE | sed "s/### ACTION ###/$action_name/g" >>$TMP_ACTION
 if [ "$cgi_dynamic_head" != "" ]; then
     eval "sed -i 's@//### JSON OBJECT ###@let obj: serde_json::Value = serde_json::from_str(\&json).unwrap();@' $TMP_ACTION_FILE"
     eval "sed -i 's@### DYNAMIC HEAD ###@$func_left$cgi_dynamic_head$func_right@' $TMP_ACTION_FILE"
+    if [ "$cgi_replace_body" != "" ]; then
+        eval "sed -i 's@### REPLACE BODY ###@$cgi_replace_body@' $TMP_ACTION_FILE"
+    else
+        eval "sed -i 's@### REPLACE BODY ###@@' $TMP_ACTION_FILE"
+    fi
 else
     eval "sed -i 's@### DYNAMIC HEAD ###@seg4_common::fs::read_to_string(format!(\"{}/head\",template_path)).expect(\"FileLoading is Failed.\"),@' $TMP_ACTION_FILE"
 fi
@@ -333,12 +343,6 @@ for line_args in $(exec_sql "select action_name,action_overview from fascon_pare
     echo "pub mod $loop_action_name;//$loop_action_overview" >>$TMP_CONTROLLER_MOD_RS
 done
 #echo "pub mod $action_name;//$action_overview" >> $TMP_CONTROLLER_MOD_RS
-
-#------------------------------------------------------------------------------
-# SQLを生成
-#------------------------------------------------------------------------------
-bl_args_sql_begin=$(exec_sql "select bl_args_sql_begin from fascon_parent_action where action_name='$action_name';")
-bl_args_where=$(exec_sql "select bl_args_where from fascon_parent_action where action_name='$action_name';")
 
 #------------------------------------------------------------------------------
 # TMP_BL_FILEの生成

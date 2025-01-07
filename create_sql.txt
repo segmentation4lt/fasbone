@@ -18,7 +18,9 @@ CREATE TABLE IF NOT EXISTS public.fascon_parent_action
     bl_pagenate_outstyle character varying COLLATE pg_catalog."default" NOT NULL DEFAULT 'json'::character varying,
     bl_contents text COLLATE pg_catalog."default",
     project_name character varying COLLATE pg_catalog."default",
-    cgi_dynamic_head text COLLATE pg_catalog."default"
+    cgi_dynamic_head character varying COLLATE pg_catalog."default",
+    cgi_dynamic_head character varying COLLATE pg_catalog."default"
+
 );
 CREATE TABLE IF NOT EXISTS public.fascon_action_members
 (

@@ -77,7 +77,7 @@
         json,
         ### DYNAMIC HEAD ###
         seg4_common::define::TEMPLATE_READ_2,
-        seg4_common::fs::read_to_string(format!("{}/body",template_path)).expect("FileLoading is Failed."),
+        seg4_common::fs::read_to_string(format!("{}/body",template_path)).expect("FileLoading is Failed.")### REPLACE BODY ###,
         seg4_common::define::TEMPLATE_READ_3,
         seg4_common::define::TEMPLATE_READ_4,
         seg4_common::fs::read_to_string(format!("{}/read_module",template_path)).expect("FileLoading is Failed."));

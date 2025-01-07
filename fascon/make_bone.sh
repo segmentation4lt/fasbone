@@ -16,7 +16,7 @@ TMP_ROUTE_FILE=/tmp/make_route_json.tmp
 
 IFS=$'\n'
 if [[ "$1" == "" ]] || [[ "$2" == "" ]] || [[ "$3" == "" ]]; then
-    echo "usage:[uri] [action name] [json reqest path]"
+    echo "usage:[reqest uri] [any Action name] [default load api url]"
     exit 5
 fi
 echo "{" >>$TMP_ROUTE_FILE
