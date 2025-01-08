@@ -300,6 +300,7 @@ if [ "$cgi_dynamic_head" != "" ]; then
     fi
 else
     eval "sed -i 's@### DYNAMIC HEAD ###@seg4_common::fs::read_to_string(format!(\"{}/head\",template_path)).expect(\"FileLoading is Failed.\"),@' $TMP_ACTION_FILE"
+    eval "sed -i 's@### REPLACE BODY ###@@' $TMP_ACTION_FILE"
 fi
 
 #------------------------------------------------------------------------------
