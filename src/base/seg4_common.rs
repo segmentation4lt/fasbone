@@ -45,6 +45,11 @@ use urlencoding::decode_binary;
 pub use std::fs;
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
+// サーバコマンド使用
+//-----------------------------------------------------------------------------------------------------------------------------------------
+pub use std::process::Command;
+
+//-----------------------------------------------------------------------------------------------------------------------------------------
 // 暗号化ベース
 //-----------------------------------------------------------------------------------------------------------------------------------------
 pub const BASE_STR: &str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789*+][-/";
@@ -185,13 +190,16 @@ pub fn for_template_outtext(html_template:&str,content_args:&str) -> String {
     messgages
 }
 
+
+
+
 #[cfg(test)]
 mod tests {
     use crate::base::seg4_common;
     #[test]
     fn test_encrypt_decrypt() {
         assert!(seg4_common::encrypt("00000000-0000-0000-0000-000000000000").chars().count() > 0);
-        //assert!(seg4_common::decrypt("").chars().count() > 0);
+        assert!(seg4_common::decrypt("WXNlUC8qYXJ1dlZCaFhGXZiwYORj5irAXw48+ams8ZYlzjZ5YkR452ysJjSSGZLXb++ou8pC4hsyi5LnS8Ra3A==").chars().count() > 0);
     }
     #[test]
     fn test_hashout_hashverify() {
