@@ -5,7 +5,7 @@
 <h2>$←command prompt</h2>
 
 $ docker pull segmentation4lt/fasbone:1.0 <br>
-$ docker run -it -p 80:80 `docker images|grep fasbone|awk '{print $3}'`  /bin/bash<br>
+$ docker run -it -p 80:80 \`docker images|grep fasbone|awk '{print $3}'\`  /bin/bash<br>
 ------ Inside Docker ------<br>
 $ service postgresql start<br>
 $ service nginx start<br>
