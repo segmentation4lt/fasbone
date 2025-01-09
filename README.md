@@ -11,7 +11,7 @@ $ service postgresql start<br>
 $ service nginx start<br>
 $ su - www-data<br>
 $ cd ./fasbone && cargo test<br>
-$ echo "{IMAGE ID}" > ./public_html/js/apihost<br>
+$ printf "{IMAGE ID}" > ./public_html/js/apihost<br>
 $ cargo run<br>
 ------ Docker Base ------<br>
 $ echo "{CONTAINER IP Adress} {IMAGE ID}" >> /etc/hosts<br>
