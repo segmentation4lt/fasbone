@@ -1,10 +1,10 @@
 <p align="center"><img src="https://d3fy1q62gxauop.cloudfront.net/media/images/bone-logo_2.png" width="400" alt="FasBone"></p>
-<p align="center"><a href="https://d3fy1q62gxauop.cloudfront.net/">Sample SPA website created with FasBone</a><code>docker pull segmentation4lt/fasbone:1.0</code></p>
+<p align="center"><a href="https://d3fy1q62gxauop.cloudfront.net/">Sample SPA website created with FasBone</a><code>docker pull segmentation4lt/fasbone:latest</code></p>
 
 <h1>Quick Start</h1>
 <h2>$←command prompt</h2>
 
-$ docker pull segmentation4lt/fasbone:1.0 <br>
+$ docker pull segmentation4lt/fasbone:latest <br>
 $ docker run -it -p 80:80 \`docker images|grep fasbone|awk '{print $3}'\`  /bin/bash<br>
 ------ Inside Docker ------<br>
 $ service postgresql start<br>
