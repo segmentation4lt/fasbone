@@ -1,5 +1,5 @@
 <p align="center"><img src="https://d3fy1q62gxauop.cloudfront.net/media/images/bone-logo_2.png" width="400" alt="FasBone"></p>
-<p align="center"><a href="https://d3fy1q62gxauop.cloudfront.net/">Sample SPA website created with FasBone</a><code>docker pull segmentation4lt/fasbone:latest</code></p>
+<p align="center"><a href="https://d3fy1q62gxauop.cloudfront.net/">Sample site combining SPA and SSG in a free serverless hosting environment created with FasBone</a></p>
 
 <h1>Quick Start</h1>
 <h2>$←command prompt</h2>
