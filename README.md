@@ -10,7 +10,7 @@ $ docker run -it -p 80:80 \`docker images|grep fasbone|awk '{print $3}'\`  /bin/
 $ service postgresql start<br>
 $ service nginx start<br>
 $ su - www-data<br>
-$ cd ./fasbone && cargo test<br>
+$ cd ./fasbone && cargo check<br>
 $ printf "{IMAGE ID}" > ./public_html/js/apihost<br>
 $ cargo run<br>
 ------ Docker Base ------<br>
