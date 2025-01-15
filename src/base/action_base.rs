@@ -295,7 +295,7 @@ impl ServerInfomation {
             //-----------------------------------------------------------------------------------------------------------------------------
             // 本番モードにてリファラなし、又は プロクシを通していればセッション拒否
             //-----------------------------------------------------------------------------------------------------------------------------
-            if (ret_is_debug == false && ret_http_referer == "" && ret_reqest_method !="GET") || ( str_http_x_forwarded_for != str_http_x_remote_addr ) {
+            if (ret_is_debug == false && ret_http_referer == "" && ret_reqest_method !="GET") || ( str_http_x_forwarded_for != str_http_x_remote_addr  && str_http_x_remote_addr != "" ) {
                 String::from("")
             } else {
                 //-------------------------------------------------------------------------------------------------------------------------
