@@ -83,7 +83,7 @@ impl ServerInfomation {
         (uuid, http_referer, user_agent, realip_remote_addr, reqest_uri, last_update) values 
         ($1, $2, $3, $4, $5, $6);
     ";
-    //UUID取得&最終更新時刻更新
+    //auth_id取得&最終更新時刻更新
     const SELECT_BY_UUID_GET: &str = "update seg4planet_session_managements set last_update=$5, reqest_uri=$6 where 
         uuid= $1 and 
         user_agent= $2 and 

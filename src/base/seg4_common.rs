@@ -122,7 +122,11 @@ pub fn url_decode(data: &str) -> String {
 pub fn decrypt(data: &str) -> String {
     let bytes = base64::decode(data).expect("failed for base64::decode(decrypt error)");
     let cipher = AesCbc::new_from_slices(define::ENCRYPT_KEY.as_bytes(), &bytes[0..16]).expect("failed for new_from_slices(decrypt error).");
-    String::from_utf8(cipher.decrypt_vec(&bytes[16..]).expect("failed for from_utf8(decrypt error)")).expect("failed of from_utf8 outside.")
+    match cipher.clone().decrypt_vec(&bytes[16..]){
+        Ok(_) => String::from_utf8(cipher.decrypt_vec(&bytes[16..]).expect("failed for from_utf8(decrypt error)")).expect("failed of from_utf8 outside."),
+        Err(_) => String::new(),
+    }
+    //String::from_utf8(cipher.decrypt_vec(&bytes[16..]).expect("failed for from_utf8(decrypt error)")).expect("failed of from_utf8 outside.")
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
@@ -185,14 +189,24 @@ pub fn for_template_outtext(html_template:&str,content_args:&str) -> String {
     let mut i :i32 =0;
     let mut messgages = fs::read_to_string(format!("{}/{}/{}",define::PACKAGE_PATH,define::CGI_TEMPLATE_DIR,html_template)).expect("FileLoading is Failed.");
     for line_args in &content_args_array {
-            messgages = messgages.replace(&format!("### VEC{} ###", i), line_args);
+            messgages = messgages.replace(&format!("### VEC{} ###", i), &trim_quotes(line_args));
         i+=1;
     }
     messgages
 }
 
-
-
+//-----------------------------------------------------------------------------------------------------------------------------------------
+// * クレート内関数:
+// * 先頭文字及び末尾文字が ダブルクォーテーションの場合のみ除外する
+//-----------------------------------------------------------------------------------------------------------------------------------------
+#[allow(dead_code)]
+fn trim_quotes(s: &str) -> String {
+    if s.starts_with('"') && s.ends_with('"') {
+        s[1..s.len()-1].to_string()
+    } else {
+        s.to_string()
+    }
+}
 
 #[cfg(test)]
 mod tests {
@@ -222,7 +236,11 @@ mod tests {
     #[test]  
     fn test_url_decode() {
         assert!(seg4_common::url_decode("%E6%9C%AA%E5%88%86%E9%A1%9E").chars().count() > 0);
-    }  
+    } 
+    #[test]  
+    fn test_trim_quotes() {
+        assert!(seg4_common::trim_quotes("\"NISHI\"").chars().count() > 0);
+    }   
 }
 
 
