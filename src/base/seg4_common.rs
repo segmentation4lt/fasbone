@@ -123,10 +123,9 @@ pub fn decrypt(data: &str) -> String {
     let bytes = base64::decode(data).expect("failed for base64::decode(decrypt error)");
     let cipher = AesCbc::new_from_slices(define::ENCRYPT_KEY.as_bytes(), &bytes[0..16]).expect("failed for new_from_slices(decrypt error).");
     match cipher.clone().decrypt_vec(&bytes[16..]){
-        Ok(_) => String::from_utf8(cipher.decrypt_vec(&bytes[16..]).expect("failed for from_utf8(decrypt error)")).expect("failed of from_utf8 outside."),
+        Ok(s) => String::from_utf8(s).expect("failed of from_utf8 outside."),
         Err(_) => String::new(),
     }
-    //String::from_utf8(cipher.decrypt_vec(&bytes[16..]).expect("failed for from_utf8(decrypt error)")).expect("failed of from_utf8 outside.")
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------------

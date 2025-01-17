@@ -129,10 +129,13 @@ impl ServerInfomation {
         //---------------------------------------------------------------------------------------------------------------------------------
         // REALIP_REMOTE_ADDR
         //---------------------------------------------------------------------------------------------------------------------------------
-        let ret_realip_remote_addr: String= match req.connection_info().realip_remote_addr() {
-            Some(value) => value.to_string(),
-            None => "".to_string()
+        let binding = req.connection_info();
+        let str_realip_remote_addr: &str= match binding.realip_remote_addr() {
+            Some(value) => value,
+            None => ""
         };
+        let ret_realip_remote_ary: Vec<&str> = str_realip_remote_addr.split(":").collect();
+        let ret_realip_remote_addr:String=ret_realip_remote_ary[0].to_string();
 
         //---------------------------------------------------------------------------------------------------------------------------------
         // CONTENT_LENGTH
