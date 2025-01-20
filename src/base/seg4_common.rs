@@ -165,6 +165,7 @@ pub fn contenttype_to_extnsis(content_type_value: &str) -> String {
 // * クレート内関数:
 // * ファイル拡張子を元にcontent_typeを返却
 //-----------------------------------------------------------------------------------------------------------------------------------------
+#[allow(dead_code)]
 pub fn extnsis_to_contenttype(extnsis_value: &str) -> String {
     let mut contenttype_count =0;
     let mut content_type = String::from("");

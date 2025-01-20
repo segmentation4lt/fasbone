@@ -51,22 +51,24 @@ pub async fn execute(
     // サーバ関連の初期化
     //-------------------------------------------------------------------------------------------------------------------------------------
     let server_info = action_base::ServerInfomation::set_server_infomation(req,&mut pg_client);
-    seg4_common::info!(
-        "[OK] Reqest Infomation. {},{},{}",serde_json::to_string(&server_info).unwrap(),
-        seg4_common::define::JSON_PERMANENT_DIR,seg4_common::define::CGI_PERMANENT_DIR
-    );
+    if server_info.is_debug == true {
+        seg4_common::info!(
+            "[OK] Reqest Infomation. {},{},{}",serde_json::to_string(&server_info).unwrap(),
+            seg4_common::define::JSON_PERMANENT_DIR,seg4_common::define::CGI_PERMANENT_DIR
+        );
+    }
 
     //-------------------------------------------------------------------------------------------------------------------------------------
     // 不正アクセスのチェック。post_token_idが空の場合は NotFoundを返却
     //-------------------------------------------------------------------------------------------------------------------------------------
-    if server_info.post_token_id == "" {
+    if server_info.post_token_id == "" || (server_info.reqest_uri == "/private/auth" && server_info.business_login_id < 1) {
         //エラーログ
-        seg4_common::info!("● UUID is Noting. {}",serde_json::to_string(&server_info).unwrap());
+        seg4_common::info!("● No UUID or unauthorized in the members area, please check reqest_uri. {}",serde_json::to_string(&server_info).unwrap());
         return Ok(HttpResponse::Forbidden()
         .header("Content-Type", seg4_common::HTTP_CONTENT_TYPE)
         .header("Cache-Control", seg4_common::HTTP_CACHE_CONTROL)
         .header("Set-Cookie", server_info.cookie_line)
-        .body(seg4_common::PARAM_ERROR))
+        .body(seg4_common::FORBIDDEN_ERROR))
     };
 
     //-------------------------------------------------------------------------------------------------------------------------------------

@@ -39,7 +39,7 @@ async fn main() -> std::io::Result<()> {
             //ファイルアップロード
             .route("/json/api/upload/",web::post().to(controller::file_upload::execute))
             //メンバーシップ閲覧(形式は拡張子に依存)
-            .route("/private/view/{dir_name}/{count}/{file_name}",web::get().to(controller::membership_webview::execute))
+            .route("/private/auth/",web::get().to(controller::index::execute))
             //ここから F.A.C.S
             //F.A.C.S ココマデ
             .wrap(middleware::Logger::new(r#"%a "%r" %s %b "%{Referer}i" "%{User-Agent}i" "%{cookie}i""#))
