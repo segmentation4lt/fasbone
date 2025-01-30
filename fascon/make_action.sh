@@ -3,7 +3,7 @@
 # SQL実行関数。区切り文字は半角セミコロン[;]
 #------------------------------------------------------------------------------
 exec_sql() {
-    eval "psql -U ssaijinworks -h localhost -p5432 ssaijinworks -tA -F \";\" -c  \"$*\""
+    eval "psql -U $PG_CONNECT_USER -h localhost -p5432 $PG_CONNECT_DATABASE -tA -F \";\" -c  \"$*\""
 }
 
 #------------------------------------------------------------------------------
