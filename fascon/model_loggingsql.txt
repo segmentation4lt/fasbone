@@ -10,7 +10,8 @@
         // バックアップの取得
         //-------------------------------------------------------------------------------------------------------------------------------------
         if QUERY_SQL.to_lowercase().contains("update") == true || QUERY_SQL.to_lowercase().contains("delete") == true {
-            let loggingdb_backup_stmt = pg_client.prepare_typed(&BACKUP_SQL.replace("### WHERE ###",&where_args).replace("### TABLE_NAME ###",&table_name), &[
+            let loggingdb_backup_stmt = pg_client.prepare_typed(&BACKUP_SQL.replace("### WHERE ###",&where_args)
+            .replace("### TABLE_NAME ###",&table_name).replace("### ORDER BY ###",&orderby_args), &[
                 ### sql_stmt_no_page ###
             ]).unwrap();
             let loggingdb_backup_query = pg_client.query_one(&loggingdb_backup_stmt, &[
@@ -37,7 +38,8 @@
         //-------------------------------------------------------------------------------------------------------------------------------------
         // SQLの実施
         //-------------------------------------------------------------------------------------------------------------------------------------
-        let query_execute_stmt = pg_client.prepare_typed(&QUERY_SQL.replace("### WHERE ###",&where_args).replace("### TABLE_NAME ###",&table_name), &[
+        let query_execute_stmt = pg_client.prepare_typed(&QUERY_SQL.replace("### WHERE ###",&where_args).replace("### TABLE_NAME ###",&table_name).
+        replace("### ORDER BY ###",&orderby_args), &[
             ### sql_stmt_no_page ###
         ]).unwrap();
         let query_execute_query = pg_client.query_one(&query_execute_stmt, &[

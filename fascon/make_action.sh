@@ -3,7 +3,7 @@
 # SQL実行関数。区切り文字は半角セミコロン[;]
 #------------------------------------------------------------------------------
 exec_sql() {
-    eval "psql -U $PG_CONNECT_USER -h localhost -p5432 $PG_CONNECT_DATABASE -tA -F \";\" -c  \"$*\""
+    eval "psql -U ssaijinworks -h localhost -p5432 ssaijinworks -tA -F \";\" -c  \"$*\""
 }
 
 #------------------------------------------------------------------------------
@@ -365,6 +365,7 @@ if [ $bl_type == "loggingdb" ]; then
         printf "            select cast(to_json(tmp_table.*) as text) as out from tmp_table;\n" >>$TMP_BL_FILE
     fi
     printf "        \";\n" >>$TMP_BL_FILE
+    printf "        const orderby_args: &str = \"$bl_args_orderby\";\n" >>$TMP_BL_FILE
     cat $JOBDIR/model_loggingsql.txt | sed "s/### sql_stmt_no_page ###/$sql_stmt_no_page/g" | sed "s/### sql_exec_no_page ###/$sql_exec_no_page/g" >>$TMP_BL_FILE
 elif [ $bl_type == "pagenate" ]; then
     printf "        const QUERY_SQL: &str =\"with tmp_table as (\n" >>$TMP_BL_FILE
