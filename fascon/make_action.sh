@@ -3,7 +3,7 @@
 # SQL実行関数。区切り文字は半角セミコロン[;]
 #------------------------------------------------------------------------------
 exec_sql() {
-    eval "psql -U $PG_CONNECT_USER -h localhost -p5432 $PG_CONNECT_DATABASE -tA -F \";\" -c  \"$*\""
+    eval "psql -U ssaijinworks -h localhost -p5432 ssaijinworks -tA -F \";\" -c  \"$*\""
 }
 
 #------------------------------------------------------------------------------
@@ -46,7 +46,7 @@ bl_args_content=$(echo $action_record | cut -d ";" -f 9)
 #ビジネスロジックの雛型タイプ pagenate/loggingdb
 bl_type=$(echo $action_record | cut -d ";" -f 10)
 #pagenate時の出力スタイル。json又はcsv
-bl_pagenate_outstyle=$(echo $action_record | cut -d ";" -f 10)
+bl_pagenate_outstyle=$(echo $action_record | cut -d ";" -f 11)
 #------------------------------------------------------------------------------
 # 一気に取れないSQLを生成
 #------------------------------------------------------------------------------

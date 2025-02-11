@@ -127,8 +127,8 @@
                 seg4_common::define::TEMPLATE_READ_2,
                 body_common_reps.join("\n")### REPLACE BODY ###,
                 seg4_common::define::TEMPLATE_READ_3,
-                seg4_common::fs::read_to_string(format!("{}/read_module",template_path)).expect("FileLoading is Failed."),
-                seg4_common::define::TEMPLATE_READ_4
+                seg4_common::define::TEMPLATE_READ_4,
+                seg4_common::fs::read_to_string(format!("{}/read_module",template_path)).expect("FileLoading is Failed.")
             )
         }))
     } else {
