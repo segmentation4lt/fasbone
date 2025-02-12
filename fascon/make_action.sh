@@ -360,7 +360,7 @@ if [ $bl_type == "loggingdb" ]; then
     printf "    $bl_args_sql_begin\n" >>$TMP_BL_FILE
     printf "        )\n" >>$TMP_BL_FILE
     if [ $bl_pagenate_outstyle == "csv" ]; then
-        printf "            select '\"\"' || trim(concat_ws(',',tmp_table.*),'()') || '\"\"' as out from tmp_table;\n" >>$TMP_BL_FILE
+        printf "            select '\\\\\"' || trim(concat_ws(',',tmp_table.*),'()') || '\\\\\"' as out from tmp_table;\n" >>$TMP_BL_FILE
     else
         printf "            select cast(to_json(tmp_table.*) as text) as out from tmp_table;\n" >>$TMP_BL_FILE
     fi
@@ -372,7 +372,7 @@ elif [ $bl_type == "pagenate" ]; then
     printf "    $bl_args_sql_begin\n" >>$TMP_BL_FILE
     printf "        )\n" >>$TMP_BL_FILE
     if [ $bl_pagenate_outstyle == "csv" ]; then
-        printf "            select '\"\"' || trim(concat_ws(',',tmp_table.*),'()') || '\"\"' as out from tmp_table;\n" >>$TMP_BL_FILE
+        printf "            select '\\\\\"' || trim(concat_ws(',',tmp_table.*),'()') || '\\\\\"' as out from tmp_table;\n" >>$TMP_BL_FILE
     else
         printf "            select cast(to_json(tmp_table.*) as text) as out from tmp_table;\n" >>$TMP_BL_FILE
     fi
