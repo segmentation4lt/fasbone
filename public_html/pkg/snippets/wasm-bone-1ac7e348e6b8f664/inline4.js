@@ -1,1 +1,1 @@
-export async function FasconExtendManual(t,a,e){a=await fetch(a,{method:t,headers:{"Content-Type":"application/x-www-form-urlencoded"},body:e}),t=await a.text();return t=a.ok?t:t||'{"result":"'+a.status+" "+a.statusText+'."}'}
+export async function FasconExtendForm(e,a){e=JSON.parse(wasm.reqdataform(e,a));return wasm.fasconextendmanual(e.request_method,e.request_url,e.serialize)}

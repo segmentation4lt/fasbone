@@ -1,18 +1,13 @@
-import { BoneRender } from './snippets/wasm-bone-1ac7e348e6b8f664/inline2.js';
-import { ReqDataForm } from './snippets/wasm-bone-1ac7e348e6b8f664/inline3.js';
-import { FasconExtendManual } from './snippets/wasm-bone-1ac7e348e6b8f664/inline4.js';
-import { FasconExtendForm } from './snippets/wasm-bone-1ac7e348e6b8f664/inline5.js';
+import { BoneRender } from './snippets/wasm-bone-1ac7e348e6b8f664/inline1.js';
+import { ReqDataForm } from './snippets/wasm-bone-1ac7e348e6b8f664/inline2.js';
+import { FasconExtendManual } from './snippets/wasm-bone-1ac7e348e6b8f664/inline3.js';
+import { FasconExtendForm } from './snippets/wasm-bone-1ac7e348e6b8f664/inline4.js';
 import * as __wbg_star0 from './snippets/wasm-bone-1ac7e348e6b8f664/inline0.js';
-import * as __wbg_star1 from './snippets/wasm-bone-1ac7e348e6b8f664/inline1.js';
 
 let wasm;
 
 export function pageload() {
     //wasm.pageload();
-}
-
-export function gethost() {
-    wasm.gethost();
 }
 
 const cachedTextDecoder = (typeof TextDecoder !== 'undefined' ? new TextDecoder('utf-8', { ignoreBOM: true, fatal: true }) : { decode: () => { throw Error('TextDecoder not available') } } );
@@ -256,7 +251,6 @@ function __wbg_get_imports() {
         ;
     };
     imports['./snippets/wasm-bone-1ac7e348e6b8f664/inline0.js'] = __wbg_star0;
-    imports['./snippets/wasm-bone-1ac7e348e6b8f664/inline1.js'] = __wbg_star1;
 
     return imports;
 }
