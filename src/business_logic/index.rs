@@ -33,7 +33,7 @@ impl BusinessLogic {
     // 画面個別SQL
     //-------------------------------------------------------------------------------------------------------------------------------------
     // SEG4初期テーブルか存在しているかどうかのチェック
-    const SEG4_TABLE_CHECK: &str = "select count(*) count from pg_tables where tableowner=$1 and ( 
+    const SEG4_TABLE_CHECK: &str = "select count(*) from pg_tables where tableowner=$1 and ( 
             tablename='seg4planet_auth_basic' or tablename='seg4planet_session_managements' or 
             tablename='seg4planet_logging_record'
         );
