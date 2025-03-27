@@ -194,6 +194,26 @@ fi
 count=1
 while [ $count -le $menber_count ]; do
     member_sqlline=$(exec_sql "select sql_id::text,member_name::text,member_type::text,required_check::text,max_limit::text,min_limit::text,valiback_message::text,check_regist::text,cast(sql_id + 2 as text) as paged_id,wherelike_flg::text from fascon_action_members inner join fascon_parent_action on fascon_parent_action.plimary=fascon_action_members.action_id where fascon_parent_action.action_name='$action_name' and fascon_action_members.sql_id=$count order by fascon_action_members.sql_id asc;")
+    #------------------------------------------------------------------------------
+    # ユーザに非公開である自分の会員IDを引数に追加 ※$1固定
+    #------------------------------------------------------------------------------
+    if [ "$member_sqlline" == "" ] && [ $count -eq 1 ];then
+        #------------------------------------------------------------------------------
+        # 各メンバのプリペアを定義
+        #------------------------------------------------------------------------------
+        sql_stmt_no_page="$sql_stmt_no_page,db_base::Type::INT8"
+        #ページングあり
+        sql_stmt_pages="$sql_stmt_pages,db_base::Type::INT8"
+        #------------------------------------------------------------------------------
+        # 各メンバの参照を定義
+        #------------------------------------------------------------------------------
+        #ページングなし
+        sql_exec_no_page="$sql_exec_no_page,&_server_info.auth_id"
+        #ページングあり
+        sql_exec_pages="$sql_exec_pages,&_server_info.auth_id"
+        count=$(expr $count + 1)
+        continue
+    fi
     sql_id=$(echo $member_sqlline | cut -d ";" -f 1)
     member_name=$(echo $member_sqlline | cut -d ";" -f 2)
     member_type=$(echo $member_sqlline | cut -d ";" -f 3)
@@ -260,6 +280,7 @@ while [ $count -le $menber_count ]; do
 
     count=$(expr $count + 1)
 done
+
 if [ $reqest_method == "Get" ] || [ $reqest_method == "Post" ]; then
     echo "}" >>$TMP_struct_param
 fi
