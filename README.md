@@ -17,21 +17,26 @@ $ cargo run<br>
 $ echo "{CONTAINER IP Adress} {IMAGE ID}" >> /etc/hosts<br>
 <h3>Let's access it with a browser!<code>http://{IMAGE ID}</code></h3>
 
-・FasBoneは、定義済みのSQLからバックエンドAPIを自動生成する軽量なウェブ開発手法です。<br>
-・フロントエンドはBackbone.JSの後継という位置付けでWebAssemblyを使用し、CGI、SSG、CSRをサポートしています。<br>
-・Amazon CloudFrontと親和性の高い構成となっており、静的JSONファイルによるAPIのコールドスタンバイを実装しています。<br>
-・タスクランナーとSSRはありません。AltJS/CSSのトランスパイルは別途実施する必要がありますが、開発中のホットリロードによるストレスから解放されます。<br>
-・ReactやJquery等他のライブラリと組み合わせて運用するのも容易な構成となっております。<br>
+・FasBone は、JAMstack を意識したプレーン JavaScript 構成のフロントエンド/バックエンド API 一体型の動的 Web サイトジェネレーターです。<br>
+・バックエンド開発では、定義済みの SQL からバックエンド API を自動生成します。<br>
+・フロントエンドは Backbone.js の後継という位置付けで、WebAssembly を使用し、CGI/SSG/CSR をサポートしています。<br>
+・Amazon CloudFront および Google Cloud Run と親和性の高い構成となっており、代替 JSON ファイルによる API のコールドスタンバイを実装しています。<br>
+・タスクランナーはありません。AltJS や SCSS のトランスパイルは別途実施する必要がありますが、タスクランナーのホットリロードによるストレスから解放されます。<br>
+・React や jQuery などの他のライブラリと組み合わせて運用するのも容易な構成となっています。<br>
+
+インストール方法、概要の説明等詳細は wikiを参照下さい
 
 <p>インストール方法、概要の説明等詳細は
 <a href="https://github.com/segmentation4lt/fasbone/wiki/">wiki</a>を参照下さい</p>
 
 
-FasBone is a lightweight web development methodology that automatically generates backend APIs from predefined SQL.<br>
-The front end uses WebAssembly, the successor to Backbone.JS, and supports CGI, SSG, and CSR.<br>
-It is highly compatible with Amazon CloudFront and implements cold standby for APIs using static JSON files.<br>
-There is no task runner or SSR, and AltJS/CSS transpiling needs to be done separately, but it frees you from the stress of hot reloading during development.<br>
-It is also easy to combine with other libraries such as React and Jquery.<br>
+FasBone is a dynamic website generator that integrates a frontend/backend API with a plain JavaScript structure that is designed with JAMstack in mind.
+FasBone is a dynamic website generator with integrated frontend and backend APIs, built on plain JavaScript with JAMstack in mind.
+The frontend is positioned as the successor to Backbone.js, using WebAssembly and supporting CGI/SSG/CSR.
+It is highly compatible with Amazon CloudFront and Google Cloud Run, and implements cold standby for APIs using alternative JSON files.
+There is no task runner; AltJS and SCSS transpiles must be performed separately, but this frees you from the stress of hot reloading the task runner.
+It is also easy to use in combination with other libraries such as React and jQuery.
+
 <p>If you have any questions or problems, <a href="https://github.com/segmentation4lt/fasbone/issues">please write here</a>.</p>
 
 <hr>
