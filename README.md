@@ -23,9 +23,6 @@ $ echo "{CONTAINER IP Adress} {IMAGE ID}" >> /etc/hosts<br>
 ・Amazon CloudFront および Google Cloud Run と親和性の高い構成となっており、代替 JSON ファイルによる API のコールドスタンバイを実装しています。<br>
 ・タスクランナーはありません。AltJS や SCSS のトランスパイルは別途実施する必要がありますが、タスクランナーのホットリロードによるストレスから解放されます。<br>
 ・React や jQuery などの他のライブラリと組み合わせて運用するのも容易な構成となっています。<br>
-
-インストール方法、概要の説明等詳細は wikiを参照下さい
-
 <p>インストール方法、概要の説明等詳細は
 <a href="https://github.com/segmentation4lt/fasbone/wiki/">wiki</a>を参照下さい</p>
 
