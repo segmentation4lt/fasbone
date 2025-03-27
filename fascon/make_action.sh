@@ -208,9 +208,9 @@ while [ $count -le $menber_count ]; do
         # 各メンバの参照を定義
         #------------------------------------------------------------------------------
         #ページングなし
-        sql_exec_no_page="$sql_exec_no_page,&_server_info.auth_id"
+        sql_exec_no_page="$sql_exec_no_page,&_server_info.business_login_id"
         #ページングあり
-        sql_exec_pages="$sql_exec_pages,&_server_info.auth_id"
+        sql_exec_pages="$sql_exec_pages,&_server_info.business_login_id"
         count=$(expr $count + 1)
         continue
     fi
