@@ -18,8 +18,8 @@ $ echo "{CONTAINER IP Adress} {IMAGE ID}" >> /etc/hosts<br>
 <h3>Let's access it with a browser!<code>http://{IMAGE ID}</code></h3>
 
 ・FasBone は、JAMstack を意識したプレーン JavaScript 構成のフロントエンド/バックエンド API 一体型の動的 Web サイトジェネレーターです。<br>
-・バックエンド開発では、定義済みの SQL からバックエンド API を自動生成します。<br>
-・フロントエンドは Backbone.js の後継という位置付けで、WebAssembly を使用し、CGI/SSG/CSR をサポートしています。<br>
+・バックエンド開発では、定義済みの SQL からRustのソースコードを自動生成します。<br>
+・フロントエンドは Backbone.js の後継という位置付けでWebAssembly を使用し、CGI/SSG/CSR をサポートしています。<br>
 ・Amazon CloudFront および Google Cloud Run と親和性の高い構成となっており、代替 JSON ファイルによる API のコールドスタンバイを実装しています。<br>
 ・タスクランナーはありません。AltJS や SCSS のトランスパイルは別途実施する必要がありますが、タスクランナーのホットリロードによるストレスから解放されます。<br>
 ・React や jQuery などの他のライブラリと組み合わせて運用するのも容易な構成となっています。<br>
