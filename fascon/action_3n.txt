@@ -75,12 +75,6 @@
     // 永続JSONの出力
     //-------------------------------------------------------------------------------------------------------------------------------------
     let permanent_dir = &format!("{}/{}",seg4_common::define::JSON_PERMANENT_DIR,seg4_common::url_decode(&server_info.reqest_uri).replace("api","static"));
-    if server_info.is_debug == true && server_info.user_agent.contains("curl") == true && server_info.query_string.contains("permanent") == true {
-        seg4_common::fs::create_dir_all(permanent_dir).expect("mkdir[JSON_PERMANENT_DIR]  is Failed");
-        let mut file = seg4_common::fs::File::create(format!("{}/index.json",&permanent_dir)).expect("Static JsonFile Create is Failed");
-        file.write_all(json.as_bytes()).expect("CreatedJsonFile Output is Failed");
-    }
-
     if server_info.reqest_uri.contains("/json/api") == false && json.contains("result\":\"200") == true && server_info.reqest_method == "GET" {
         let mut body_common_reps: Vec<String> =[].to_vec();
         for file_args in seg4_common::fs::read_to_string(format!("{}/body",template_path)).expect("FileLoading is Failed.").split("\n").collect::<Vec<_>>() {
@@ -132,6 +126,13 @@
         .header("Content-Type", seg4_common::HTTP_CONTENT_TYPE)
         .header("Cache-Control", seg4_common::HTTP_CACHE_CONTROL)
         .header("Set-Cookie", server_info.cookie_line)
-        .body(json))
+        .body(if server_info.is_debug == true && server_info.user_agent.contains("curl") == true && server_info.query_string.contains("permanent") == true {
+            seg4_common::fs::create_dir_all(permanent_dir).expect("mkdir[JSON_PERMANENT_DIR]  is Failed");
+            let mut file = seg4_common::fs::File::create(format!("{}/index.json",&permanent_dir)).expect("Static JsonFile Create is Failed");
+            file.write_all(json.as_bytes()).expect("CreatedJsonFile Output is Failed");
+            "".to_string()
+        }else{
+            json
+        }))
     }
 } //execute 終端
