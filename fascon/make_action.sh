@@ -63,7 +63,7 @@ menber_count=$(exec_sql "select max(fascon_action_members.sql_id) from fascon_ac
 #fi
 #一時保存アクションファイル
 ACTION_2_FILE=$(test $menber_count -eq 0 && echo "action_2n.txt" || echo "action_2.txt")
-ACTION_3_FILE=$(test $menber_count -eq 0 && echo "action_3n.txt" || echo "action_3.txt")
+
 BL_1_FILE=$(test $menber_count -eq 0 && echo "bl_1n.txt" || echo "bl_1.txt")
 
 TMP_ACTION_FILE=/tmp/make_action.tmp
@@ -308,9 +308,34 @@ cat $JOBDIR/$ACTION_2_FILE | sed "s/### REQEST_METHOD_FORM ###/$reqest_method_fo
 #member_loop
 cat $TMP_member_check_loop >>$TMP_ACTION_FILE
 #action_3
-func_left=$(echo "seg4_common::for_template_outtext(\"$action_name/head\",\&format\!("|sed 's@\\!@!@g')
-func_right=")),"
-cat $JOBDIR/$ACTION_3_FILE | sed "s/### ACTION ###/$action_name/g" >>$TMP_ACTION_FILE
+func_left=$(echo "seg4_common::for_template_outtext(\"$action_name/head\",\&format\!("|sed 's@\\!@!@g')func_right=")),"
+
+if [ $menber_count -eq 0 ];then
+ cat << EOF >>$TMP_ACTION_FILE
+    //-------------------------------------------------------------------------------------------------------------------------------------
+    // 入力チェック結果を集計
+    //-------------------------------------------------------------------------------------------------------------------------------------
+    for (_key, _value) in &input_params {
+    }
+    valiback_detail.insert(String::from("Result"), 0);
+EOF
+else
+cat << EOF >>$TMP_ACTION_FILE
+    //-------------------------------------------------------------------------------------------------------------------------------------
+    // 入力チェック結果を集計
+    //-------------------------------------------------------------------------------------------------------------------------------------
+    for (key, value) in &input_params {
+        if value.result == false {
+            //詳細を追加
+            valiback_detail.insert(key, &value.result_msg);
+            //全体の戻り値を更新
+            input_result.insert(String::from("Result"), 5);
+        }
+    }
+EOF
+fi
+
+cat "$JOBDIR/action_3.txt" | sed "s/### ACTION ###/$action_name/g" >>$TMP_ACTION_FILE
 if [ "$cgi_dynamic_head" != "" ]; then
     eval "sed -i 's@//### JSON OBJECT ###@let obj: serde_json::Value = serde_json::from_str(\&json).unwrap();@' $TMP_ACTION_FILE"
     eval "sed -i 's@### DYNAMIC HEAD ###@$func_left$cgi_dynamic_head$func_right@' $TMP_ACTION_FILE"
