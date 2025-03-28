@@ -308,7 +308,8 @@ cat $JOBDIR/$ACTION_2_FILE | sed "s/### REQEST_METHOD_FORM ###/$reqest_method_fo
 #member_loop
 cat $TMP_member_check_loop >>$TMP_ACTION_FILE
 #action_3
-func_left=$(echo "seg4_common::for_template_outtext(\"$action_name/head\",\&format\!("|sed 's@\\!@!@g')func_right=")),"
+func_left=$(echo "seg4_common::for_template_outtext(\"$action_name/head\",\&format\!("|sed 's@\\!@!@g')
+func_right=")),"
 
 if [ $menber_count -eq 0 ];then
  cat << EOF >>$TMP_ACTION_FILE
