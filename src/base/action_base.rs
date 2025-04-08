@@ -99,6 +99,9 @@ impl ServerInfomation {
     //時間が経過したsessionを削除
     const TIME_OVER_SESSION_DELETE: &str = "delete from seg4planet_session_managements where  uuid <> '00000000-0000-0000-0000-000000000000' and last_update < $1";
 
+    //最終アクセス時刻を元に戻す
+    const UPDATE_ASEC_ROLLBACK: &str = "update seg4planet_session_managements set last_update = last_update - $1 where uuid = $2;";
+
     //-------------------------------------------------------------------------------------------------------------------------------------
     // * トレイト内関数:set_server_infomation
     // * 構造体ServerInfomation として値を代入する。
@@ -333,17 +336,12 @@ impl ServerInfomation {
                 }else{
                     String::from("")
                 };
-                let prep_stmt = if ret_reqest_method == "GET" && ret_http_referer == "" { 
-                    pg_client.prepare_typed(&Self::SELECT_BY_UUID_GET, &[
+                let prep_stmt = pg_client.prepare_typed(
+                    if ret_reqest_method == "GET" && ret_http_referer == "" {
+                        &Self::SELECT_BY_UUID_GET}else{&Self::SELECT_BY_UUID}, &[
                     db_base::Type::TEXT,db_base::Type::TEXT,db_base::Type::TEXT,
                     db_base::Type::TEXT,db_base::Type::INT8,db_base::Type::TEXT
-                    ]).unwrap()
-                }else{
-                    pg_client.prepare_typed(&Self::SELECT_BY_UUID, &[
-                        db_base::Type::TEXT,db_base::Type::TEXT,db_base::Type::TEXT,
-                        db_base::Type::TEXT,db_base::Type::INT8,db_base::Type::TEXT
-                    ]).unwrap()
-                };
+                ]).unwrap();
                 let count_ret = pg_client.query(&prep_stmt, &[
                     &local_uuid,&ret_user_agent,&ret_realip_remote_addr,&check_referer,&ret_timestamp,&ret_reqest_uri
                 ]).unwrap();
@@ -447,7 +445,17 @@ impl ServerInfomation {
         }
     } //メンバ関数:new_session_record ブロック
 
-
+    //-------------------------------------------------------------------------------------------------------------------------------------
+    // * トレイト内関数:update_asec_rollback
+    // * 最終アクセス時刻をロールバック
+    //-------------------------------------------------------------------------------------------------------------------------------------
+    #[allow(dead_code)]
+    pub fn update_asec_rollback(uuid: &str,pg_client: &mut db_base::postgres::Client) -> () {
+        pg_client.execute(
+            Self::UPDATE_ASEC_ROLLBACK,
+            &[&seg4_common::define::UPDATE_ASEC,&uuid],
+        ).unwrap();
+    }//メンバ関数:update_asec_rollback ブロック
 }//トレイト:ServerInfomation ブロック
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
