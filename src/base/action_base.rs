@@ -544,22 +544,12 @@ impl InputParametars {
             }
         } else {
         //---------------------------------------------------------------------------------------------------------------------------------
-        //  フロート、値のチェック ※-1はマジックナンバー
+        //  値のチェック ※-1はマジックナンバー
         //---------------------------------------------------------------------------------------------------------------------------------
-            if ret_float_value <= min_in as f64 && min_in != -1 {
+            if (ret_float_value <= min_in as f64 && min_in != -1) || (ret_intvalue <= min_in && min_in != -1) {
                 message_in = format!("{}を超える値を入力して下さい", min_in);
                 ret_result = false;
-            } else if ret_float_value > max_in as f64 && max_in != -1 {
-                message_in = format!("{}未満の値を入力して下さい", max_in);
-                ret_result = false;
-            }
-        //---------------------------------------------------------------------------------------------------------------------------------
-        //  整数、値のチェック ※-1はマジックナンバー
-        //---------------------------------------------------------------------------------------------------------------------------------
-            if ret_intvalue <= min_in && min_in != -1 {
-                message_in = format!("{}より多い値を入力して下さい", min_in);
-                ret_result = false;
-            } else if ret_intvalue > max_in && max_in != -1 {
+            } else if (ret_float_value > max_in as f64 && max_in != -1) ||  (ret_intvalue > max_in && max_in != -1) {
                 message_in = format!("{}未満の値を入力して下さい", max_in);
                 ret_result = false;
             }
