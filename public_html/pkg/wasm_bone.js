@@ -6,10 +6,6 @@ import * as __wbg_star0 from './snippets/wasm-bone-1ac7e348e6b8f664/inline0.js';
 
 let wasm;
 
-export function pageload() {
-    //wasm.pageload();
-}
-
 const cachedTextDecoder = (typeof TextDecoder !== 'undefined' ? new TextDecoder('utf-8', { ignoreBOM: true, fatal: true }) : { decode: () => { throw Error('TextDecoder not available') } } );
 
 if (typeof TextDecoder !== 'undefined') { cachedTextDecoder.decode(); };
@@ -83,6 +79,24 @@ function passStringToWasm0(arg, malloc, realloc) {
     WASM_VECTOR_LEN = offset;
     return ptr;
 }
+
+function isLikeNone(x) {
+    return x === undefined || x === null;
+}
+
+let cachedDataViewMemory0 = null;
+
+function getDataViewMemory0() {
+    if (cachedDataViewMemory0 === null || cachedDataViewMemory0.buffer.detached === true || (cachedDataViewMemory0.buffer.detached === undefined && cachedDataViewMemory0.buffer !== wasm.memory.buffer)) {
+        cachedDataViewMemory0 = new DataView(wasm.memory.buffer);
+    }
+    return cachedDataViewMemory0;
+}
+
+export function pageload() {
+    wasm.pageload();
+}
+
 /**
  * @param {string} templat_name
  * @param {string} tag_id
@@ -139,6 +153,21 @@ export function fasconextendform(form_name, validation_only) {
     return ret;
 }
 
+/**
+ * @param {boolean} required
+ * @param {string} args
+ * @param {boolean} string_type_in
+ * @param {string} message_in
+ * @param {bigint} min_in
+ * @param {bigint} max_in
+ * @param {string} check_regix_in
+ * @returns {any}
+ */
+export function checkparam(required, args, string_type_in, message_in, min_in, max_in, check_regix_in) {
+    const ret = wasm.checkparam(required, args, string_type_in, message_in, min_in, max_in, check_regix_in);
+    return ret;
+}
+
 async function __wbg_load(module, imports) {
     if (typeof Response === 'function' && module instanceof Response) {
         if (typeof WebAssembly.instantiateStreaming === 'function') {
@@ -173,7 +202,7 @@ async function __wbg_load(module, imports) {
 function __wbg_get_imports() {
     const imports = {};
     imports.wbg = {};
-    imports.wbg.__wbg_BoneRender_34689aa91c070a8b = function(arg0, arg1, arg2, arg3, arg4, arg5) {
+    imports.wbg.__wbg_BoneRender_6e271b3063ef1294 = function(arg0, arg1, arg2, arg3, arg4, arg5) {
         let deferred0_0;
         let deferred0_1;
         let deferred1_0;
@@ -194,19 +223,19 @@ function __wbg_get_imports() {
             wasm.__wbindgen_free(deferred2_0, deferred2_1, 1);
         }
     };
-    imports.wbg.__wbg_ReqDataForm_f3512d645df344d8 = function(arg0, arg1, arg2) {
+    imports.wbg.__wbg_FasconExtendForm_c7fedf3a3cc81808 = function(arg0, arg1, arg2) {
         let deferred0_0;
         let deferred0_1;
         try {
             deferred0_0 = arg0;
             deferred0_1 = arg1;
-            const ret = ReqDataForm(getStringFromWasm0(arg0, arg1), arg2 !== 0);
+            const ret = FasconExtendForm(getStringFromWasm0(arg0, arg1), arg2 !== 0);
             return ret;
         } finally {
             wasm.__wbindgen_free(deferred0_0, deferred0_1, 1);
         }
     };
-    imports.wbg.__wbg_FasconExtendManual_6242daed08893f58 = function(arg0, arg1, arg2, arg3, arg4, arg5) {
+    imports.wbg.__wbg_FasconExtendManual_fe37970fc4db1d68 = function(arg0, arg1, arg2, arg3, arg4, arg5) {
         let deferred0_0;
         let deferred0_1;
         let deferred1_0;
@@ -228,20 +257,20 @@ function __wbg_get_imports() {
             wasm.__wbindgen_free(deferred2_0, deferred2_1, 1);
         }
     };
-    imports.wbg.__wbg_FasconExtendForm_7049573cba3fcd6d = function(arg0, arg1, arg2) {
+    imports.wbg.__wbg_ReqDataForm_106ae9835cae0679 = function(arg0, arg1, arg2) {
         let deferred0_0;
         let deferred0_1;
         try {
             deferred0_0 = arg0;
             deferred0_1 = arg1;
-            const ret = FasconExtendForm(getStringFromWasm0(arg0, arg1), arg2 !== 0);
+            const ret = ReqDataForm(getStringFromWasm0(arg0, arg1), arg2 !== 0);
             return ret;
         } finally {
             wasm.__wbindgen_free(deferred0_0, deferred0_1, 1);
         }
     };
     imports.wbg.__wbindgen_init_externref_table = function() {
-        const table = wasm.__wbindgen_export_0;
+        const table = wasm.__wbindgen_export_1;
         const offset = table.grow(4);
         table.set(0, undefined);
         table.set(offset + 0, undefined);
@@ -249,6 +278,21 @@ function __wbg_get_imports() {
         table.set(offset + 2, true);
         table.set(offset + 3, false);
         ;
+    };
+    imports.wbg.__wbindgen_string_get = function(arg0, arg1) {
+        const obj = arg1;
+        const ret = typeof(obj) === 'string' ? obj : undefined;
+        var ptr1 = isLikeNone(ret) ? 0 : passStringToWasm0(ret, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        var len1 = WASM_VECTOR_LEN;
+        getDataViewMemory0().setInt32(arg0 + 4 * 1, len1, true);
+        getDataViewMemory0().setInt32(arg0 + 4 * 0, ptr1, true);
+    };
+    imports.wbg.__wbindgen_string_new = function(arg0, arg1) {
+        const ret = getStringFromWasm0(arg0, arg1);
+        return ret;
+    };
+    imports.wbg.__wbindgen_throw = function(arg0, arg1) {
+        throw new Error(getStringFromWasm0(arg0, arg1));
     };
     imports['./snippets/wasm-bone-1ac7e348e6b8f664/inline0.js'] = __wbg_star0;
 
@@ -262,11 +306,11 @@ function __wbg_init_memory(imports, memory) {
 function __wbg_finalize_init(instance, module) {
     wasm = instance.exports;
     __wbg_init.__wbindgen_wasm_module = module;
+    cachedDataViewMemory0 = null;
     cachedUint8ArrayMemory0 = null;
 
 
     wasm.__wbindgen_start();
-    wasm.pageload();
     return wasm;
 }
 
