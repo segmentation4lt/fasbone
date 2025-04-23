@@ -56,7 +56,7 @@ cgi_dynamic_head=$(exec_sql "select cgi_dynamic_head from fascon_parent_action w
 cgi_replace_body=$(exec_sql "select cgi_replace_body from fascon_parent_action where action_name='$action_name' and project_name='$project_name';")
 
 #アクションメンバ 存在を確認
-menber_count=$(exec_sql "select max(fascon_action_members.sql_id) from fascon_action_members inner join fascon_parent_action on fascon_parent_action.plimary=fascon_action_members.action_id where fascon_parent_action.action_name='$action_name';")
+menber_count=$(exec_sql "select coalesce(max(fascon_action_members.sql_id),0) from fascon_action_members inner join fascon_parent_action on fascon_parent_action.plimary=fascon_action_members.action_id where fascon_parent_action.action_name='$action_name';")
 #if [ $menber_count -eq 0 ]; then
 #    echo "No such member."
 #    exit 9
