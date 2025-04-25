@@ -94,7 +94,7 @@ function getDataViewMemory0() {
 }
 
 export function pageload() {
-    wasm.pageload();
+    //wasm.pageload();
 }
 
 /**
@@ -311,6 +311,7 @@ function __wbg_finalize_init(instance, module) {
 
 
     wasm.__wbindgen_start();
+    wasm.pageload();
     return wasm;
 }
 
