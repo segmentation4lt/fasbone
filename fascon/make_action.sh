@@ -3,7 +3,7 @@
 # SQL実行関数。区切り文字は半角セミコロン[;]
 #------------------------------------------------------------------------------
 exec_sql() {
-	eval "psql -U $PG_CONNECT_USER -h localhost -p5432 $PG_CONNECT_DATABASE -tA -F \";\" -c  \"$*\""
+    eval "psql -U $PG_CONNECT_USER -h localhost -p5432 $PG_CONNECT_DATABASE -tA -F \";\" -c  \"$*\""
 }
 
 #------------------------------------------------------------------------------
@@ -13,10 +13,11 @@ exec_sql() {
 export PATH="/usr/sbin:/usr/bin:/usr/local/bin:/usr/local/sbin:/sbin:/bin:/usr/X11/bin:/usr/local/pgsql/bin"
 #カレントディレクトリ
 JOBNAME=$(basename $0) >/dev/null 2>&1
-JOBDIR=$(echo $0 | sed "s/$JOBNAME//g") >/dev/null 2>&1
-[ "$JOBDIR" = "./" ] && JOBDIR=$(pwd)
+JOBDIR=$(find "$(pwd)" -name "$JOBNAME"|sed "s/$JOBNAME//g"| sed 's/.$//') >/dev/null 2>&1
+
 #プロジェクト名の取得
 project_name=$(basename $(echo $JOBDIR | sed s'@/fascon@@g'))
+
 #アクション名 存在を確認
 action_name=$1
 if [ $(exec_sql "select count(plimary) from fascon_parent_action where action_name='$action_name' and project_name='$project_name';") -eq 0 ]; then
@@ -356,9 +357,9 @@ fi
 #分割対象ファイル
 main_rs_file="$JOBDIR/../src/main.rs"
 #区切り行(下から数えて【//F.A.C.S ココマデ】の部分)
-kugiri_row=8
+kugiri_row=$(tac $main_rs_file | grep -n 'F.A.C.S ココマデ$' | cut -d: -f1)
 #区切り行(上から数えて【//F.A.C.S ココカラ】の部分)
-zenhan_row=45
+zenhan_row=$(grep -n 'ここから F.A.C.S' $main_rs_file | cut -d: -f1)
 #行数
 main_rs_rows=$(wc -l $main_rs_file | cut -d " " -f1)
 #関数
@@ -375,8 +376,6 @@ for line_args in $(exec_sql "select reqest_uri,case when reqest_method <> 'Post'
     loop_action_name=$(echo $line_args | cut -d ";" -f 3)
     echo "            .route(\"$loop_reqest_uri\",web::$loop_main_web().to(controller::$loop_action_name::execute))" >>$TMP_MAIN_FILE
 done
-#echo "            .route(\"$reqest_uri\",web::$main_web().to(controller::$action_name::execute))" >> $TMP_MAIN_FILE
-
 eval "tail -$zenhan_row $main_rs_file|grep -v \"$action_name\"" >>$TMP_MAIN_FILE
 
 #------------------------------------------------------------------------------
@@ -390,7 +389,6 @@ for line_args in $(exec_sql "select action_name,action_overview from fascon_pare
     loop_action_overview=$(echo $line_args | cut -d ";" -f 2)
     echo "pub mod $loop_action_name;//$loop_action_overview" >>$TMP_CONTROLLER_MOD_RS
 done
-#echo "pub mod $action_name;//$action_overview" >> $TMP_CONTROLLER_MOD_RS
 
 #------------------------------------------------------------------------------
 # TMP_BL_FILEの生成
@@ -448,6 +446,7 @@ for line_args in $(exec_sql "select action_name,action_overview from fascon_pare
     loop_action_overview=$(echo $line_args | cut -d ";" -f 2)
     echo "pub mod $loop_action_name;//$loop_action_overview" >>$TMP_BUSINESS_LOGIC_MOD_RS
 done
+
 #echo "pub mod $action_name;//$action_overview" >> $TMP_BUSINESS_LOGIC_MOD_RS
 
 #------------------------------------------------------------------------------
