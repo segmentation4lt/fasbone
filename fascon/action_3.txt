@@ -67,6 +67,12 @@
     // 永続JSONの出力
     //-------------------------------------------------------------------------------------------------------------------------------------
     let permanent_dir = &format!("{}/{}",seg4_common::define::JSON_PERMANENT_DIR,seg4_common::url_decode(&server_info.reqest_uri).replace("api","static"));
+    if server_info.is_debug == true && server_info.user_agent.contains("curl") == true && server_info.query_string.contains("permanent") == true {
+        seg4_common::fs::create_dir_all(permanent_dir).expect("mkdir[JSON_PERMANENT_DIR]  is Failed");
+        let mut file = seg4_common::fs::File::create(format!("{}/index.json",&permanent_dir)).expect("Static JsonFile Create is Failed");
+        file.write_all(json.as_bytes()).expect("CreatedJsonFile Output is Failed");
+    }
+
     if server_info.reqest_uri.contains("/json/api") == false && json.contains("result\":\"200") == true && server_info.reqest_method == "GET" {
         let mut body_common_reps: Vec<String> =[].to_vec();
         for file_args in seg4_common::fs::read_to_string(format!("{}/body",template_path)).expect("FileLoading is Failed.").split("\n").collect::<Vec<_>>() {
@@ -90,7 +96,7 @@
             )
             .output()
             .expect("Failed to execute command");
-            let _ =seg4_common::fs::remove_file(format!("{}/index.json",&permanent_dir));
+            let _ =seg4_common::fs::remove_dir_all(format!("{}/index.json",&permanent_dir));
             let permanent_dir = &format!("{}/{}{}",seg4_common::define::PACKAGE_PATH,seg4_common::define::CGI_PERMANENT_DIR,seg4_common::url_decode(&server_info.reqest_uri));
             seg4_common::fs::create_dir_all(permanent_dir).expect("mkdir[CGI_PERMANENT_DIR]  is Failed");
             let mut file = seg4_common::fs::File::create(format!("{}/index.html",&permanent_dir)).expect("Index HTML File Create is Failed");
@@ -109,8 +115,8 @@
                 seg4_common::define::TEMPLATE_READ_2,
                 body_common_reps.join("\n")### REPLACE BODY ###,
                 seg4_common::define::TEMPLATE_READ_3,
-                seg4_common::define::TEMPLATE_READ_4,
-                seg4_common::fs::read_to_string(format!("{}/read_module",template_path)).expect("FileLoading is Failed.")
+                seg4_common::fs::read_to_string(format!("{}/read_module",template_path)).expect("FileLoading is Failed."),
+                seg4_common::define::TEMPLATE_READ_4
             )
         }))
     } else {
@@ -118,13 +124,6 @@
         .header("Content-Type", seg4_common::HTTP_CONTENT_TYPE)
         .header("Cache-Control", seg4_common::HTTP_CACHE_CONTROL)
         .header("Set-Cookie", server_info.cookie_line)
-        .body(if server_info.is_debug == true && server_info.user_agent.contains("curl") == true && server_info.query_string.contains("permanent") == true {
-            seg4_common::fs::create_dir_all(permanent_dir).expect("mkdir[JSON_PERMANENT_DIR]  is Failed");
-            let mut file = seg4_common::fs::File::create(format!("{}/index.json",&permanent_dir)).expect("Static JsonFile Create is Failed");
-            file.write_all(json.as_bytes()).expect("CreatedJsonFile Output is Failed");
-            "".to_string()
-        }else{
-            json
-        }))
+        .body(json))
     }
 } //execute 終端
