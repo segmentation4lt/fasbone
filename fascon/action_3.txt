@@ -96,7 +96,7 @@
             )
             .output()
             .expect("Failed to execute command");
-            let _ =seg4_common::fs::remove_dir_all(format!("{}/index.json",&permanent_dir));
+            let _ =seg4_common::fs::remove_dir_all(&permanent_dir);
             let permanent_dir = &format!("{}/{}{}",seg4_common::define::PACKAGE_PATH,seg4_common::define::CGI_PERMANENT_DIR,seg4_common::url_decode(&server_info.reqest_uri));
             seg4_common::fs::create_dir_all(permanent_dir).expect("mkdir[CGI_PERMANENT_DIR]  is Failed");
             let mut file = seg4_common::fs::File::create(format!("{}/index.html",&permanent_dir)).expect("Index HTML File Create is Failed");
