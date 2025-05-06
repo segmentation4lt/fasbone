@@ -41,7 +41,7 @@ cat $TMP_ROUTE_FILE | sed -z 's/\}\n\,/\}\,/g' | sed -z 's/\}\}/\}\n\}/g' >$JOBD
 # FasBone→ReaclSQL 変更点
 #------------------------------------------------------------------------------
 if [ "$render" = "react" ];then
-    cp -p $JOBDIR/../esbuild_src/pages/404.tsx $JOBDIR/../public_html/pages/action/$2.tsx
+    cp -p $JOBDIR/../esbuild_src/pages/404.tsx $JOBDIR/../esbuild_src/pages/$2.tsx
 else
     cp -p $JOBDIR/../public_html/js/action/404.js $JOBDIR/../public_html/js/action/$2.js
     touch $JOBDIR/../public_html/template/action/$2.template

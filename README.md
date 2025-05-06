@@ -1,5 +1,21 @@
-<p align="center"><img src="https://d3fy1q62gxauop.cloudfront.net/media/images/bone-logo_2.png" width="400" alt="FasBone"></p>
-<p align="center"><a href="https://d3fy1q62gxauop.cloudfront.net/">Sample site combining SPA and SSG in a free serverless hosting environment created with FasBone</a></p>
+<pre>当該リポジトリ「FasBone」は"既存のレンダリングエンジン"をunderscore.jsからreactに変更しリポジトリ名を「ReactSQL」に変更致しました。
+後方互換性は担保されており、レンダリングエンジンをunderscore.jsとreactを併用する事も可能です。
+詳細な資料については現在制作中でございます。随時次第 READMEを更新いたします。
+今後共何卒宜しくお願い致します。
+
+旧合同会社 セグメンテーション・フォルト
+
+
+The repository “「FasBone」 has changed the “existing rendering engine from underscore.js to react and renamed the repository “「ReactSQL」.
+Backward compatibility is ensured, and it is possible to use both the underscore.js and react rendering engines.
+Detailed documentation is currently under construction. We will update the README as soon as possible.
+Thank you for your continued support.
+
+Formerly Segmentation Fault, LLC
+
+Translated with DeepL.com (free version)
+</pre>
+
 
 <h1>Quick Start</h1>
 <h2>$←command prompt</h2>
