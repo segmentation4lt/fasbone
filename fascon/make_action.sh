@@ -20,6 +20,15 @@ project_name=$(basename $(echo $JOBDIR | sed s'@/fascon@@g'))
 
 #アクション名 存在を確認
 action_name=$1
+
+#描画エンジン確認(FasBone→ReactSQL新機能)
+render=""
+if [[ "$2" == "" ]] || [[ "$2" != "bone" ]];then
+    render="react"
+else
+    render="$2"
+fi
+
 if [ $(exec_sql "select count(plimary) from fascon_parent_action where action_name='$action_name' and project_name='$project_name';") -eq 0 ]; then
     echo "No such action."
     exit 9
@@ -302,6 +311,7 @@ sql_stmt_pages=$(echo $sql_stmt_pages | sed 's@,@\\,@g' | sed 's@&@\\&@g')
 #------------------------------------------------------------------------------
 #action_1
 cat $JOBDIR/action_1.txt | sed "s/### ACTION ###/$action_name/g" | sed "s/### METHOD ###/$reqest_method/g" >>$TMP_ACTION_FILE
+
 #struct_param
 cat $TMP_struct_param >>$TMP_ACTION_FILE
 #action_2
@@ -337,7 +347,11 @@ cat << EOF >>$TMP_ACTION_FILE
 EOF
 fi
 
-cat "$JOBDIR/action_3.txt" | sed "s/### ACTION ###/$action_name/g" >>$TMP_ACTION_FILE
+#------------------------------------------------------------------------------
+# FasBone→ReactSQL 変更点
+#------------------------------------------------------------------------------
+eval "patch -p0 --dry-run --output=- < $JOBDIR/$(echo $render|sed 's@bone@ejs@g').patch | sed \"s/### ACTION ###/$action_name/g\" >> $TMP_ACTION_FILE" > /dev/null 2>&1
+
 if [ "$cgi_dynamic_head" != "" ]; then
     eval "sed -i 's@//### JSON OBJECT ###@let obj: serde_json::Value = serde_json::from_str(\&json).unwrap();@' $TMP_ACTION_FILE"
     eval "sed -i 's@### DYNAMIC HEAD ###@$func_left$cgi_dynamic_head$func_right@' $TMP_ACTION_FILE"

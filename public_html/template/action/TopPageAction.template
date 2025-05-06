@@ -1,9 +1,11 @@
+<h1>各種動作確認</h1>
+<h2>CSR template(bone)</h2>
 <ul>
 <% for(var i = 0, len = 5; i < len; i++){ %>
-<li>ここがリスト <%= i %> です。変数は <%= lists[i] %>です。</li>
+<li>リスト <%= i %> 番目です</li>
 <% } %>
 </ul>
-<!-- 反映確認 -->
+<h2>バックエンドプログラム</h2>
 <div id="func1"></div>
 
 <div id="container">
