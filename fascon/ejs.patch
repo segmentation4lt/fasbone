@@ -1,0 +1,24 @@
+--- action_3.txt	2025-05-05 23:20:03.830686692 +0900
++++ action_3k.txt	2025-05-05 23:06:38.658675221 +0900
+@@ -73,8 +73,21 @@
+         file.write_all(json.as_bytes()).expect("CreatedJsonFile Output is Failed");
+     }
+     if server_info.reqest_uri.contains("/json/api") == false && json.contains("result\":\"200") == true && server_info.reqest_method == "GET" {
++        let mut body_common_reps: Vec<String> =[].to_vec();
++        for file_args in seg4_common::fs::read_to_string(format!("{}/body",template_path)).expect("FileLoading is Failed.").split("\n").collect::<Vec<_>>() {
++            body_common_reps.push(
++                if file_args.contains("### ") == true && file_args.contains(" ###") == true {    
++                seg4_common::fs::read_to_string(format!("{}/../common/{}",template_path,file_args.split(" ").collect::<Vec<_>>()[1])).expect("FileLoading is Failed.")
++                }else{
++                    file_args.to_string()
++                }
++            );
++        };
+         let view_cmd = seg4_common::Command::new("node")
+         .arg("-e")
++        .arg(format!("const fs = require('fs');const ejs = require('ejs'); console.log(ejs.render('{}',JSON.parse(fs.readFileSync('{}', 'utf8'))));",
++            body_common_reps.join("").replace("\r\n","").replace("\r","").replace("\n","").replace("'","\\'").replace("<%-","<%@@").replace("<%=","<%-").replace("<%@@","<%="),format!("{}/index.json",&permanent_dir))
++        )
+         .output()
+         .expect("Failed to execute command");
+         let _ =seg4_common::fs::remove_dir_all(&permanent_dir);

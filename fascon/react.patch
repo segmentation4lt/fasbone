@@ -1,0 +1,13 @@
+--- action_3.txt	2025-05-05 23:20:03.830686692 +0900
++++ action_3k.txt	2025-05-05 23:06:56.923438114 +0900
+@@ -74,7 +74,10 @@
+     }
+     if server_info.reqest_uri.contains("/json/api") == false && json.contains("result\":\"200") == true && server_info.reqest_method == "GET" {
+         let view_cmd = seg4_common::Command::new("node")
++        .arg("-r")
++        .arg("@babel/register")
+         .arg("-e")
++        .arg(format!("require('@babel/register')({{ presets: ['@babel/preset-env', '@babel/preset-react', '@babel/preset-typescript'], extensions: ['.js', '.jsx', '.ts', '.tsx'] }}); const fs = require('fs');var response = JSON.parse(fs.readFileSync('{}'));require('{}');",format!("{}/index.json",&permanent_dir),format!("{}/body.tsx",template_path)))
+         .output()
+         .expect("Failed to execute command");
+         let _ =seg4_common::fs::remove_dir_all(&permanent_dir);

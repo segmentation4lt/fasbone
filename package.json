@@ -1,0 +1,28 @@
+{
+  "name": "react_dev",
+  "version": "1.0.0",
+  "description": "<p align=\"center\"><img src=\"https://d3fy1q62gxauop.cloudfront.net/media/images/bone-logo_2.png\" width=\"400\" alt=\"FasBone\"></p> <p align=\"center\"><a href=\"https://d3fy1q62gxauop.cloudfront.net/\">Sample site combining SPA and SSG in a free serverless hosting environment created with FasBone</a></p>",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.26.10",
+    "@babel/preset-env": "^7.26.9",
+    "@babel/preset-react": "^7.26.3",
+    "@babel/register": "^7.25.9",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "esbuild": "^0.25.3",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@babel/preset-typescript": "^7.27.0",
+    "ejs": "^3.1.10",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  }
+}
