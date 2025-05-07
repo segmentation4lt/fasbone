@@ -469,11 +469,15 @@ done
 if [ $(cat $JOBDIR/../src/main.rs | grep -c $action_name) -eq 0 ]; then
     mkdir -p $JOBDIR/../resorce/html_template/$action_name
     mkdir -p $JOBDIR/../resorce/mail_template/$action_name
-    touch $JOBDIR/../resorce/html_template/$action_name/body
-    touch $JOBDIR/../resorce/html_template/$action_name/head
-    touch $JOBDIR/../resorce/html_template/$action_name/read_module
     cp -p $TMP_CONTROLLER_MOD_RS $JOBDIR/../src/controller/mod.rs
     cp -p $TMP_BUSINESS_LOGIC_MOD_RS $JOBDIR/../src/business_logic/mod.rs
+    if [ "$render" == "react" ]; then
+        cp -p $JOBDIR/../esbuild_src/pages/404.tsx $JOBDIR/../resorce/html_template/$action_name/body.tsx
+    else
+        touch $JOBDIR/../resorce/html_template/$action_name/body
+    fi
+    touch $JOBDIR/../resorce/html_template/$action_name/head
+    touch $JOBDIR/../resorce/html_template/$action_name/read_module
 fi
 cp -p $TMP_MAIN_FILE $JOBDIR/../src/main.rs
 cp -p $TMP_ACTION_FILE $JOBDIR/../src/controller/$action_name.rs
