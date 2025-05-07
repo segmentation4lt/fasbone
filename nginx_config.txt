@@ -61,7 +61,7 @@ server {
     #-----------------------------------------------------------------------
     # FASCONにディスパッチ
     #-----------------------------------------------------------------------
-    location ~ ^(/json/api|/cgi-bin|/private/view) {
+    location ~ ^(/json/api|/cgi-bin) {
         add_header Access-Control-Allow-Origin '*' always;
         add_header Access-Control-Allow-Methods "GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS";
         add_header Access-Control-Allow-Headers "Origin, Authorization, Accept";
