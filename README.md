@@ -1,7 +1,7 @@
 <p align="center"><img src="https://d3fy1q62gxauop.cloudfront.net/media/images/rectsql-logo.png" width="800" alt="ReactSQL"></p>
-<pre>当該リポジトリ「FasBone」は"既存のレンダリングエンジン"をunderscore.jsからreactに変更しリポジトリ名を「ReactSQL」に変更致しました。
+<p>当該リポジトリ「FasBone」は"既存のレンダリングエンジン"をunderscore.jsからreactに変更しリポジトリ名を「ReactSQL」に変更致しました。
 後方互換性は担保されており、レンダリングエンジンをunderscore.jsとreactを併用する事も可能です。
-詳細な資料については現在制作中でございます。随時次第 READMEを更新いたします。
+詳細な資料については現在制作中で進展状況を随時READMEを更新いたします。
 今後共何卒宜しくお願い致します。
 
 旧合同会社 セグメンテーション・フォルト
@@ -13,7 +13,7 @@ Detailed documentation is currently under construction. We will update the READM
 Thank you for your continued support.
 
 Formerly Segmentation Fault, LLC
-</pre>
+</p>
 
 
 <h1>Quick Start</h1>
