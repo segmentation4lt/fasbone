@@ -1,9 +1,9 @@
-CREATE DATABASE fasbone
+CREATE DATABASE reactsql
     WITH TEMPLATE template0
          ENCODING 'UTF8'
          LC_COLLATE 'ja_JP.UTF-8'
          LC_CTYPE 'ja_JP.UTF-8';
-CREATE USER fasbone WITH PASSWORD 'fasbone';
-ALTER DATABASE fasbone SET timezone TO 'Asia/Tokyo';
-ALTER DATABASE fasbone OWNER TO fasbone;
+CREATE USER reactsql WITH PASSWORD 'reactsql';
+ALTER DATABASE reactsql SET timezone TO 'Asia/Tokyo';
+ALTER DATABASE reactsql OWNER TO reactsql;
 
