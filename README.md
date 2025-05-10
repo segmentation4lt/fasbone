@@ -28,9 +28,7 @@ $ docker run -it -p 80:80 \`docker images|grep reactsql|awk '{print $3}'\`  /bin
 # echo $C_IP > /var/www/reactsql/public_html/js/apihost
 # service postgresql start
 # service nginx start
-# su - www-data
-$ cd ./reactsql && cargo check
-$ cargo run
+# su - www-data -c "cd ~/reactsql && cargo run"
 </pre>
 ------ Docker Base ------<br>
 <h3>Let's access it with a browser!<code>http://{CONTAINER IP}</code></h3>
