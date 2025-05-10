@@ -22,7 +22,7 @@ Formerly Segmentation Fault, LLC
 $ docker pull segmentation4lt/reactsql:latest <br>
 $ docker run -it -p 80:80 \`docker images|grep reactsql|awk '{print $3}'\`  /bin/bash<br>
 ------ Inside Docker ------<br>
-$ C_IP=$(ip a|grep inet|grep -v "127"|head -1|awk '{print $2}'|cut -d "/" -f1)
+$ C_IP=$(ip a|grep inet|grep -v "127"|head -1|awk '{print $2}'|cut -d "/" -f1)<br>
 $ sed -i "s/<IP ADRESS>/$C_IP/g" /etc/nginx/sites-available/reactsql<br>
 $ echo $C_IP > /var/www/reactsql/public_html/js/apihost<br>
 $ service postgresql start<br>
