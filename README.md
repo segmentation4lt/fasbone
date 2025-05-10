@@ -24,8 +24,8 @@ $ docker run -it -p 80:80 \`docker images|grep reactsql|awk '{print $3}'\`  /bin
 ------ Inside Docker ------<br>
 <pre>
 # C_IP={OUTSIDE NODE'S IP ADRESS}
-# sed -i "s/OUTSIDE_NODE_IP_ADRESS/$C_IP/g" /etc/nginx/sites-available/reactsaql
-# echo $C_IP > /var/www/reactsql/public_html/js/apihost
+# sed -i "s/OUTSIDE_NODE_IP_ADRESS/$C_IP/g" /etc/nginx/sites-available/reactsql
+# printf $C_IP > /var/www/reactsql/public_html/js/apihost
 # service postgresql start
 # service nginx start
 # su - www-data -c "cd ~/reactsql && cargo run"
