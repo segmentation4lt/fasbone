@@ -22,12 +22,12 @@ Formerly Segmentation Fault, LLC
 $ docker pull segmentation4lt/reactsql:latest <br>
 $ docker run -it -p 80:80 \`docker images|grep reactsql|awk '{print $3}'\`  /bin/bash<br>
 ------ Inside Docker ------<br>
-# C_IP={OUTSIDE NODE'S IP ADRESS}<br>
-# sed -i "s/OUTSIDE_NODE_IP_ADRESS/$C_IP/g" /etc/nginx/sites-available/reactsql<br>
-# echo $C_IP > /var/www/reactsql/public_html/js/apihost<br>
-# service postgresql start<br>
-# service nginx start<br>
-# su - www-data<br>
+$ C_IP={OUTSIDE NODE'S IP ADRESS}<br>
+$ sed -i "s/OUTSIDE_NODE_IP_ADRESS/$C_IP/g" /etc/nginx/sites-available/reactsql<br>
+$ echo $C_IP > /var/www/reactsql/public_html/js/apihost<br>
+$ service postgresql start<br>
+$ service nginx start<br>
+$ su - www-data<br>
 $ cd ./reactsql && cargo check<br>
 $ cargo run<br>
 ------ Docker Base ------<br>
